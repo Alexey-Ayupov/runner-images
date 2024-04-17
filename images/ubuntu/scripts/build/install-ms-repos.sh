@@ -7,7 +7,11 @@
 os_label=$(lsb_release -rs)
 
 # Install Microsoft repository
-wget https://packages.microsoft.com/config/ubuntu/$os_label/packages-microsoft-prod.deb
+if is_ubuntu24; then
+    wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb
+else
+    wget https://packages.microsoft.com/config/ubuntu/$os_label/packages-microsoft-prod.deb
+fi
 dpkg -i packages-microsoft-prod.deb
 
 # update
