@@ -64,7 +64,7 @@ variable "image_folder" {
 
 variable "image_os" {
   type    = string
-  default = "ubuntu22"
+  default = "ubuntu24"
 }
 
 variable "image_version" {
@@ -256,22 +256,6 @@ build {
     environment_vars = ["DEBIAN_FRONTEND=noninteractive", "HELPER_SCRIPTS=${var.helper_script_folder}", "INSTALLER_SCRIPT_FOLDER=${var.installer_script_folder}"]
     execute_command  = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
     scripts          = ["${path.root}/../scripts/build/install-apt-vital.sh"]
-  }
-
-  provisioner "shell" {
-    environment_vars = ["HELPER_SCRIPT_FOLDER=${var.helper_script_folder}", "INSTALLER_SCRIPT_FOLDER=${var.installer_script_folder}", "IMAGE_FOLDER=${var.image_folder}"]
-    execute_command  = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
-    scripts          = ["${path.root}/../scripts/build/configure-system.sh"]
-  }
-
-  provisioner "file" {
-    destination = "/tmp/"
-    source      = "${path.root}/../assets/ubuntu2404.conf"
-  }
-
-  provisioner "shell" {
-    execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
-    inline          = ["mkdir -p /etc/vsts", "cp /tmp/ubuntu2204.conf /etc/vsts/machine_instance.conf"]
   }
 
   provisioner "shell" {
