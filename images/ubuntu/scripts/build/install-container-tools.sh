@@ -27,7 +27,7 @@ if is_ubuntu20; then
     echo "deb [arch=amd64 signed-by=$GPG_KEY] ${REPO_URL}/ /" > $REPO_PATH
 fi
 
-# Install podman, buildah, scopeo container's tools
+# Install podman, buildah, skopeo container's tools
 apt-get update
 apt-get -y install ${install_packages[@]}
 mkdir -p /etc/containers

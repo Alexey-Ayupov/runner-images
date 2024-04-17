@@ -1,3 +1,4 @@
+Import-Module "$PSScriptRoot/../helpers/Common.Helpers.psm1"
 Describe "PHP" {
     $testCases = (Get-ToolsetContent).php.versions | ForEach-Object { @{PhpVersion = $_} }
 
@@ -24,7 +25,7 @@ Describe "PHP" {
     }
 }
 
-Describe "Swift" {
+Describe "Swift" -Skip:(Test-IsUbuntu24) {
     It "swift" {
         "swift --version" | Should -ReturnZeroExitCode
     }

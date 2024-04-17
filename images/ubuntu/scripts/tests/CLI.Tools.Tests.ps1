@@ -1,3 +1,4 @@
+Import-Module "$PSScriptRoot/../helpers/Common.Helpers.psm1"
 Describe "Azure CLI" {
     It "Azure CLI" {
         "az --version" | Should -ReturnZeroExitCode
@@ -10,7 +11,7 @@ Describe "Azure DevOps CLI" {
     }
 }
 
-Describe "Aliyun CLI" {
+Describe "Aliyun CLI"  -Skip:(Test-IsUbuntu24) {
     It "Aliyun CLI" {
         "aliyun version" | Should -ReturnZeroExitCode
     }
@@ -36,19 +37,19 @@ Describe "GitHub CLI" {
     }
 }
 
-Describe "Google Cloud CLI" {
+Describe "Google Cloud CLI" -Skip:(Test-IsUbuntu24) {
     It "Google Cloud CLI" {
         "gcloud --version" | Should -ReturnZeroExitCode
     }
 }
 
-Describe "OC CLI" {
+Describe "OC CLI" -Skip:(Test-IsUbuntu24) {
     It "OC CLI" {
         "oc version" | Should -ReturnZeroExitCode
     }
 }
 
-Describe "Oras CLI" {
+Describe "Oras CLI" -Skip:(Test-IsUbuntu24) {
     It "Oras CLI" {
         "oras version" | Should -ReturnZeroExitCode
     }

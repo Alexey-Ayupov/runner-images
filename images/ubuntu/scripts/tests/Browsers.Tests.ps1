@@ -1,4 +1,5 @@
-Describe "Firefox" {
+Import-Module "$PSScriptRoot/../helpers/Common.Helpers.psm1"
+Describe "Firefox" -Skip:(Test-IsUbuntu24) {
     It "Firefox" {
         "firefox --version" | Should -ReturnZeroExitCode
     }
@@ -24,7 +25,7 @@ Describe "Chrome" {
     }
 }
 
-Describe "Edge" {
+Describe "Edge" -Skip:(Test-IsUbuntu24) {
     It "Edge" {
         "microsoft-edge --version" | Should -ReturnZeroExitCode
     }

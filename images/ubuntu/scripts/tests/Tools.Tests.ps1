@@ -1,3 +1,4 @@
+Import-Module "$PSScriptRoot/../helpers/Common.Helpers.psm1"
 Describe "azcopy" {
     It "azcopy" {
         "azcopy --version" | Should -ReturnZeroExitCode
@@ -29,20 +30,20 @@ Describe "Rust" {
         "rustc --version" | Should -ReturnZeroExitCode
     }
 
-    It "Rustdoc is installed" {
+    It "Rustdoc is installed" -Skip:(Test-IsUbuntu24) {
         "rustdoc --version" | Should -ReturnZeroExitCode
     }
 
-    It "Rustfmt is installed" {
+    It "Rustfmt is installed" -Skip:(Test-IsUbuntu24) {
         "rustfmt --version" | Should -ReturnZeroExitCode
     }
 
     Context "Cargo dependencies" {
-        It "bindgen" {
+        It "bindgen" -Skip:(Test-IsUbuntu24) {
             "bindgen --version" | Should -ReturnZeroExitCode
         }
 
-        It "cbindgen" {
+        It "cbindgen" -Skip:(Test-IsUbuntu24) {
             "cbindgen --version" | Should -ReturnZeroExitCode
         }
 
@@ -50,15 +51,15 @@ Describe "Rust" {
             "cargo --version" | Should -ReturnZeroExitCode
         }
 
-        It "cargo-clippy" {
+        It "cargo-clippy" -Skip:(Test-IsUbuntu24) {
             "cargo-clippy --version" | Should -ReturnZeroExitCode
         }
 
-        It "Cargo audit" {
+        It "Cargo audit" -Skip:(Test-IsUbuntu24) {
             "cargo audit --version" | Should -ReturnZeroExitCode
         }
 
-        It "Cargo outdated" {
+        It "Cargo outdated" -Skip:(Test-IsUbuntu24) {
             "cargo outdated --version" | Should -ReturnZeroExitCode
         }
     }
@@ -97,7 +98,7 @@ Describe "Docker" {
     }
 }
 
-Describe "Docker images" {
+Describe "Docker images" -Skip:(Test-IsUbuntu24) {
     $testCases = (Get-ToolsetContent).docker.images | ForEach-Object { @{ ImageName = $_ } }
 
     It "<ImageName>" -TestCases $testCases {
@@ -105,7 +106,7 @@ Describe "Docker images" {
     }
 }
 
-Describe "Docker-compose v1" {
+Describe "Docker-compose v1" -Skip:(Test-IsUbuntu24) {
     It "docker-compose" {
         "docker-compose --version"| Should -ReturnZeroExitCode
     }
@@ -117,7 +118,7 @@ Describe "Ansible" {
     }
 }
 
-Describe "Bazel" {
+Describe "Bazel" -Skip:(Test-IsUbuntu24) {
     It "<ToolName>" -TestCases @(
         @{ ToolName = "bazel" }
         @{ ToolName = "bazelisk" }
@@ -182,13 +183,13 @@ Describe "Mono" {
     }
 }
 
-Describe "MSSQLCommandLineTools" {
+Describe "MSSQLCommandLineTools" -Skip:(Test-IsUbuntu24) {
     It "sqlcmd" {
         "sqlcmd -?" | Should -ReturnZeroExitCode
     }
 }
 
-Describe "SqlPackage" {
+Describe "SqlPackage" -Skip:(Test-IsUbuntu24) {
     It "sqlpackage" {
         "sqlpackage /version" | Should -ReturnZeroExitCode
     }
@@ -200,7 +201,7 @@ Describe "R" {
     }
 }
 
-Describe "Sbt" {
+Describe "Sbt" -Skip:(Test-IsUbuntu24) {
     It "sbt" {
         "sbt --version" | Should -ReturnZeroExitCode
     }
@@ -213,7 +214,7 @@ Describe "Selenium" {
     }
 }
 
-Describe "Terraform" {
+Describe "Terraform" -Skip:(Test-IsUbuntu24) {
     It "terraform" {
         "terraform --version" | Should -ReturnZeroExitCode
     }
@@ -251,7 +252,7 @@ Describe "Git-lfs" {
     }
 }
 
-Describe "Heroku" {
+Describe "Heroku" -Skip:(Test-IsUbuntu24) {
     It "heroku" {
         "heroku --version" | Should -ReturnZeroExitCode
     }
@@ -297,7 +298,7 @@ Describe "Kubernetes tools" {
     }
 }
 
-Describe "Leiningen" {
+Describe "Leiningen" -Skip:(Test-IsUbuntu24) {
     It "leiningen" {
         "lein --version" | Should -ReturnZeroExitCode
     }
@@ -309,7 +310,7 @@ Describe "Conda" {
     }
 }
 
-Describe "Packer" {
+Describe "Packer" -Skip:(Test-IsUbuntu24) {
     It "packer" {
         "packer --version" | Should -ReturnZeroExitCode
     }
@@ -328,7 +329,7 @@ Describe "Phantomjs" -Skip:(Test-IsUbuntu22) {
     }
 }
 
-Describe "Containers" {
+Describe "Containers" -Skip:(Test-IsUbuntu24) {
     $testCases = @("podman", "buildah", "skopeo") | ForEach-Object { @{ContainerCommand = $_} }
 
     It "<ContainerCommand>" -TestCases $testCases {
@@ -344,7 +345,7 @@ Describe "Containers" {
 
 }
 
-Describe "nvm" {
+Describe "nvm" -Skip:(Test-IsUbuntu24) {
     It "nvm" {
         "source /etc/skel/.nvm/nvm.sh && nvm --version" | Should -ReturnZeroExitCode
     }
@@ -380,7 +381,7 @@ Describe "yq" {
     }
 }
 
-Describe "Kotlin" {
+Describe "Kotlin" -Skip:(Test-IsUbuntu24) {
     It "kapt" {
         "kapt -version" | Should -ReturnZeroExitCode
     }

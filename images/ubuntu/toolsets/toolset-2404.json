@@ -7,10 +7,6 @@
             "platform_version": "22.04",
             "arch": "x64",
             "versions": [
-                "3.7.*",
-                "3.8.*",
-                "3.9.*",
-                "3.10.*",
                 "3.11.*",
                 "3.12.*"
             ]
@@ -20,8 +16,6 @@
             "arch": "x64",
             "platform" : "linux",
             "versions": [
-                "3.7",
-                "3.8",
                 "3.9",
                 "3.10"
             ]
@@ -73,8 +67,8 @@
     },
     "android": {
         "cmdline-tools": "commandlinetools-linux-9477386_latest.zip",
-        "platform_min_version": "31",
-        "build_tools_min_version": "31.0.0",
+        "platform_min_version": "33",
+        "build_tools_min_version": "33.0.0",
         "extra_list": [
             "android;m2repository",
             "google;m2repository",
@@ -83,9 +77,6 @@
         "addon_list": [
         ],
         "additional_tools": [
-            "cmake;3.10.2.4988404",
-            "cmake;3.18.1",
-            "cmake;3.22.1"
         ],
         "ndk": {
             "default": "25",
@@ -95,7 +86,6 @@
         }
     },
     "powershellModules": [
-        {"name": "MarkdownPS"},
         {"name": "Microsoft.Graph"},
         {"name": "Pester"},
         {"name": "PSScriptAnalyzer"}
@@ -213,20 +203,6 @@
     ],
     "docker": {
         "images": [
-            "alpine:3.16",
-            "alpine:3.17",
-            "alpine:3.18",
-            "debian:10",
-            "debian:11",
-            "moby/buildkit:latest",
-            "node:16",
-            "node:18",
-            "node:20",
-            "node:16-alpine",
-            "node:18-alpine",
-            "node:20-alpine",
-            "ubuntu:20.04",
-            "ubuntu:22.04"
         ],
         "components": [
             {
@@ -247,7 +223,7 @@
                 "plugin": "buildx",
                 "version": "latest",
                 "asset": "linux-amd64"
-            },            
+            },
             {
                 "plugin": "compose",
                 "version": "2.23.3",
