@@ -1,4 +1,5 @@
 Import-Module "$PSScriptRoot/../helpers/Common.Helpers.psm1"
+
 Describe "Azure CLI" {
     It "Azure CLI" {
         "az --version" | Should -ReturnZeroExitCode

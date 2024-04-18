@@ -1,6 +1,6 @@
 Import-Module "$PSScriptRoot/../helpers/Common.Helpers.psm1"
 
-Describe "Dotnet and tools" {
+Describe "Dotnet and tools" -Skip:(Test-IsUbuntu24) {
     BeforeAll {
         $env:PATH = "/etc/skel/.dotnet/tools:$($env:PATH)"
         $dotnetSDKs = dotnet --list-sdks | ConvertTo-Json

@@ -50,8 +50,8 @@ $languageAndRuntime.AddToolVersionsListInline("GNU Fortran", $(Get-FortranVersio
 $languageAndRuntime.AddToolVersion("Julia", $(Get-JuliaVersion))
 if (-not $(Test-IsUbuntu24)) {
     $languageAndRuntime.AddToolVersion("Kotlin", $(Get-KotlinVersion))
+    $languageAndRuntime.AddToolVersion("Mono", $(Get-MonoVersion))
 }
-$languageAndRuntime.AddToolVersion("Mono", $(Get-MonoVersion))
 $languageAndRuntime.AddToolVersion("MSBuild", $(Get-MsbuildVersion))
 $languageAndRuntime.AddToolVersion("Node.js", $(Get-NodeVersion))
 $languageAndRuntime.AddToolVersion("Perl", $(Get-PerlVersion))
@@ -240,9 +240,11 @@ if (-not $(Test-IsUbuntu24)) {
 }
 $browsersTools.AddHeader("Environment variables").AddTable($(Build-BrowserWebdriversEnvironmentTable))
 
-$netCoreTools = $installedSoftware.AddHeader(".NET Tools")
-$netCoreTools.AddToolVersionsListInline(".NET Core SDK", $(Get-DotNetCoreSdkVersions), "^\d+\.\d+\.\d")
-$netCoreTools.AddNodes($(Get-DotnetTools))
+if (-not $(Test-IsUbuntu24)) {
+    $netCoreTools = $installedSoftware.AddHeader(".NET Tools")
+    $netCoreTools.AddToolVersionsListInline(".NET Core SDK", $(Get-DotNetCoreSdkVersions), "^\d+\.\d+\.\d")
+    $netCoreTools.AddNodes($(Get-DotnetTools))
+}
 
 $databasesTools = $installedSoftware.AddHeader("Databases")
 if (Test-IsUbuntu20) {

@@ -1,67 +1,6 @@
 {
-    "toolcache": [
-        {
-            "name": "Python",
-            "url" : "https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json",
-            "platform" : "linux",
-            "platform_version": "22.04",
-            "arch": "x64",
-            "versions": [
-                "3.11.*",
-                "3.12.*"
-            ]
-        },
-        {
-            "name": "PyPy",
-            "arch": "x64",
-            "platform" : "linux",
-            "versions": [
-                "3.9",
-                "3.10"
-            ]
-        },
-        {
-            "name": "node",
-            "url" : "https://raw.githubusercontent.com/actions/node-versions/main/versions-manifest.json",
-            "platform" : "linux",
-            "arch": "x64",
-            "versions": [
-                "16.*",
-                "18.*",
-                "20.*"
-            ]
-        },
-        {
-            "name": "go",
-            "url" : "https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json",
-            "arch": "x64",
-            "platform" : "linux",
-            "versions": [
-                "1.20.*",
-                "1.21.*",
-                "1.22.*"
-            ],
-            "default": "1.21.*"
-        },
-        {
-            "name": "Ruby",
-            "platform_version": "22.04",
-            "arch": "x64",
-            "versions": [
-                "3.1.*"
-            ]
-        },
-        {
-            "name": "CodeQL",
-            "platform" : "linux",
-            "arch": "x64",
-            "versions": [
-                "*"
-            ]
-        }
-    ],
     "java": {
-        "default": "11",
+        "default": "21",
         "versions": [ "8", "11", "17", "21"],
         "maven": "3.8.8"
     },
@@ -95,7 +34,7 @@
             "name": "az",
             "url" : "https://raw.githubusercontent.com/Azure/az-ps-module-versions/main/versions-manifest.json",
             "versions": [
-                "11.3.1"
+                "11.5.0"
             ],
             "zip_versions": [
             ]
@@ -123,28 +62,9 @@
             "fakeroot",
             "fonts-noto-color-emoji",
             "gnupg2",
-            "imagemagick",
             "iproute2",
             "iputils-ping",
-            "lib32z1",
-            "libc++abi-dev",
-            "libc++-dev",
-            "libc6-dev",
-            "libcurl4",
-            "libgbm-dev",
-            "libgconf-2-4",
-            "libgsl-dev",
-            "libgtk-3-0",
-            "libmagic-dev",
-            "libmagickcore-dev",
-            "libmagickwand-dev",
-            "libsecret-1-dev",
-            "libsqlite3-dev",
-            "libyaml-dev",
             "libtool",
-            "libunwind8",
-            "libxkbfile-dev",
-            "libxss1",
             "libssl-dev",
             "locales",
             "mercurial",
@@ -157,7 +77,6 @@
             "tk",
             "tzdata",
             "upx",
-            "xorriso",
             "xvfb",
             "xz-utils",
             "zsync"
@@ -181,7 +100,6 @@
             "net-tools",
             "p7zip-full",
             "parallel",
-            "pass",
             "patchelf",
             "pigz",
             "pollinate",
@@ -191,7 +109,6 @@
             "sqlite3",
             "ssh",
             "sshpass",
-            "subversion",
             "sudo",
             "swig",
             "telnet",
@@ -262,27 +179,25 @@
             "17",
             "18"
         ],
-        "default_version": "17"
+        "default_version": "18"
     },
     "gcc": {
         "versions": [
-            "g++-9",
-            "g++-10",
+            "g++-11",
             "g++-12",
             "g++-13"
         ]
     },
     "gfortran": {
         "versions": [
-            "gfortran-9",
-            "gfortran-10",
+            "gfortran-11",
             "gfortran-12",
             "gfortran-13"
         ]
     },
     "php": {
         "versions": [
-            "8.1"
+            "8.3"
         ]
     },
     "rubygems": [
@@ -292,7 +207,7 @@
         "version": "4"
     },
     "node": {
-        "default": "18"
+        "default": "20"
     },
     "node_modules": [
         {
@@ -320,20 +235,12 @@
             "command": "newman"
         },
         {
-            "name": "vercel",
-            "command": "vercel"
-        },
-        {
             "name": "webpack",
             "command": "webpack"
         },
         {
             "name": "webpack-cli",
             "command": "webpack-cli"
-        },
-        {
-            "name": "netlify-cli",
-            "command": "netlify"
         },
         {
             "name": "lerna",

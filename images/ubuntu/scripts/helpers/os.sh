@@ -13,5 +13,5 @@ is_ubuntu22() {
 }
 
 is_ubuntu24() {
-    lsb_release -d | grep -q 'Ubuntu 24'
+    lsb_release -d | grep -q 'Ubuntu Noble Numbat'
 }

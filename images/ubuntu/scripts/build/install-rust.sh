@@ -17,18 +17,19 @@ curl -fsSL https://sh.rustup.rs | sh -s -- -y --default-toolchain=stable --profi
 source $CARGO_HOME/env
 
 if ! is_ubuntu24; then
-# Install common tools
     rustup component add rustfmt clippy
-
-    if is_ubuntu22; then
-        cargo install bindgen-cli cbindgen cargo-audit cargo-outdated
-    else
-        cargo install --locked bindgen-cli cbindgen cargo-audit cargo-outdated
-    fi
-
-    # Cleanup Cargo cache
-    rm -rf ${CARGO_HOME}/registry/*
 fi
+
+if is_ubuntu22; then
+    cargo install bindgen-cli cbindgen cargo-audit cargo-outdated
+fi
+
+if is_ubuntu20; then
+    cargo install --locked bindgen-cli cbindgen cargo-audit cargo-outdated
+fi
+
+# Cleanup Cargo cache
+rm -rf ${CARGO_HOME}/registry/*
 
 # Update /etc/environment
 prepend_etc_environment_path '$HOME/.cargo/bin'
