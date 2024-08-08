@@ -26,7 +26,7 @@ Describe "cmake" {
     }
 }
 
-Describe "Subversion" -Skip:($os.IsVentura -or $os.IsSonoma) {
+Describe "Subversion" -Skip:($os.IsVentura -or $os.IsSonoma -or $os.IsSequoia) {
     It "Subversion" {
         "svn --version" | Should -ReturnZeroExitCode
     }
@@ -62,7 +62,7 @@ Describe "Perl" {
     }
 }
 
-Describe "Helm" -Skip:($os.IsMonterey -or $os.IsVentura -or $os.IsSonoma) {
+Describe "Helm" -Skip:($os.IsMonterey -or $os.IsVentura -or $os.IsSonoma -or $os.IsSequoia) {
     It "Helm" {
         "helm version --short" | Should -ReturnZeroExitCode
     }
@@ -117,13 +117,13 @@ Describe "bazel" {
     }
 }
 
-Describe "Aliyun CLI" -Skip:($os.IsMonterey -or $os.IsVentura -or $os.IsSonoma) {
+Describe "Aliyun CLI" -Skip:($os.IsMonterey -or $os.IsVentura -or $os.IsSonoma -or $os.IsSequoia) {
     It "Aliyun CLI" {
         "aliyun --version" | Should -ReturnZeroExitCode
     }
 }
 
-Describe "Julia" -Skip:($os.IsVentura -or $os.IsSonoma) {
+Describe "Julia" -Skip:($os.IsVentura -or $os.IsSonoma -or $os.IsSequoia) {
     It "Julia" {
         "julia --version" | Should -ReturnZeroExitCode
     }
@@ -147,19 +147,19 @@ Describe "wget" {
     }
 }
 
-Describe "vagrant" -Skip:($os.IsBigSur -or $os.IsVentura -or $os.IsSonoma) {
+Describe "vagrant" -Skip:($os.IsBigSur -or $os.IsVentura -or $os.IsSonoma -or $os.IsSequoia) {
     It "vagrant" {
         "vagrant --version" | Should -ReturnZeroExitCode
     }
 }
 
-Describe "virtualbox" -Skip:($os.IsBigSur -or $os.IsVentura -or $os.IsSonoma) {
+Describe "virtualbox" -Skip:($os.IsBigSur -or $os.IsVentura -or $os.IsSonoma -or $os.IsSequoia) {
     It "virtualbox" {
         "vboxmanage -v" | Should -ReturnZeroExitCode
     }
 }
 
-Describe "R" -Skip:($os.IsVentura -or $os.IsSonoma -or $os.IsBigSur) {
+Describe "R" -Skip:($os.IsVentura -or $os.IsSonoma -or $os.IsBigSur -or $os.IsSequoia) {
     It "R" {
         "R --version" | Should -ReturnZeroExitCode
     }
@@ -179,7 +179,7 @@ Describe "Kotlin" {
     }
 }
 
-Describe "sbt" -Skip:($os.IsVentura -or $os.IsSonoma) {
+Describe "sbt" -Skip:($os.IsVentura -or $os.IsSonoma -or $os.IsSequoia) {
     It "sbt" {
         "sbt -version" | Should -ReturnZeroExitCode
     }
@@ -191,7 +191,7 @@ Describe "yq" {
     }
 }
 
-Describe "imagemagick" -Skip:($os.IsBigSur -or $os.IsVentura -or $os.IsSonoma) {
+Describe "imagemagick" -Skip:($os.IsBigSur -or $os.IsVentura -or $os.IsSonoma -or $os.IsSequoia) {
     It "imagemagick" {
         "magick -version" | Should -ReturnZeroExitCode
     }
