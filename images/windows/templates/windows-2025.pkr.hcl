@@ -244,7 +244,14 @@ build {
   provisioner "powershell" {
     elevated_password = "${var.install_password}"
     elevated_user     = "${var.install_user}"
-    inline            = ["bcdedit.exe /set TESTSIGNING ON"]
+    inline            = [
+      "bcdedit.exe /set TESTSIGNING ON",
+      "bcdedit.exe /set hypervisorlaunchtype auto"
+    ]
+  }
+
+  provisioner "windows-restart" {
+    restart_timeout = "10m"
   }
 
   provisioner "powershell" {
