@@ -245,6 +245,7 @@ build {
     elevated_password = "${var.install_password}"
     elevated_user     = "${var.install_user}"
     inline            = [
+      "bcdedit /enum"
       "bcdedit.exe /set TESTSIGNING ON",
       "bcdedit.exe /set hypervisorlaunchtype auto"
     ]
@@ -252,6 +253,12 @@ build {
 
   provisioner "windows-restart" {
     restart_timeout = "10m"
+  }
+
+  provisioner "powershell" {
+    elevated_password = "${var.install_password}"
+    elevated_user     = "${var.install_user}"
+    inline            = ["bcdedit /enum"]
   }
 
   provisioner "powershell" {
