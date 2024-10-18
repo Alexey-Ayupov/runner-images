@@ -162,7 +162,6 @@
     },
     "windowsFeatures": [
         { "name": "Containers" },
-        { "name": "Hyper-V", "includeAllSubFeatures": true },
         { "name": "HypervisorPlatform", "optionalFeature": true },
         { "name": "Hyper-V-PowerShell" },
         { "name": "Microsoft-Windows-Subsystem-Linux", "optionalFeature": true },

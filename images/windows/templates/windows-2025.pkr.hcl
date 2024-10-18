@@ -244,18 +244,7 @@ build {
   provisioner "powershell" {
     elevated_password = "${var.install_password}"
     elevated_user     = "${var.install_user}"
-    inline            = [
-      "bcdedit /enum",
-      "bcdedit.exe /set TESTSIGNING ON"
-    ]
-  }
-
-  provisioner "powershell" {
-    inline            = ["bcdedit.exe /set hypervisorlaunchtype auto"]
-  }
-
-  provisioner "windows-restart" {
-    restart_timeout = "10m"
+    inline            = ["bcdedit.exe /set TESTSIGNING ON"]
   }
 
   provisioner "powershell" {
@@ -285,7 +274,23 @@ build {
   }
 
   provisioner "powershell" {
-    inline = ["Set-Service -Name wlansvc -StartupType Manual", "if ($(Get-Service -Name wlansvc).Status -eq 'Running') { Stop-Service -Name wlansvc}"]
+    inline = [
+      "Set-Service -Name wlansvc -StartupType Manual",
+      "if ($(Get-Service -Name wlansvc).Status -eq 'Running') { Stop-Service -Name wlansvc}",
+      "bcdedit.exe /set hypervisorlaunchtype auto"
+    ]
+  }
+
+  provisioner "windows-restart" {
+    restart_timeout = "10m"
+  }
+
+  provisioner "powershell" {
+    scripts            = ["${path.root}/../scripts/build/Install-Hyper-V.ps1"]
+  }
+
+  provisioner "windows-restart" {
+    restart_timeout = "10m"
   }
 
   provisioner "powershell" {
