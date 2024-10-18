@@ -169,7 +169,6 @@
         { "name": "VirtualMachinePlatform", "optionalFeature": true },
         { "name": "NET-Framework-45-Features", "includeAllSubFeatures": true },
         { "name": "Client-ProjFS", "optionalFeature": true },
-        { "name": "NET-Framework-Features", "includeAllSubFeatures": true },
         { "name": "Wireless-Networking" }
     ],
     "visualStudio": {
