@@ -246,9 +246,12 @@ build {
     elevated_user     = "${var.install_user}"
     inline            = [
       "bcdedit /enum",
-      "bcdedit.exe /set TESTSIGNING ON",
-      "bcdedit.exe /set hypervisorlaunchtype auto"
+      "bcdedit.exe /set TESTSIGNING ON"
     ]
+  }
+
+  provisioner "powershell" {
+    inline            = ["bcdedit.exe /set hypervisorlaunchtype auto"]
   }
 
   provisioner "windows-restart" {
@@ -256,8 +259,6 @@ build {
   }
 
   provisioner "powershell" {
-    elevated_password = "${var.install_password}"
-    elevated_user     = "${var.install_user}"
     inline            = ["bcdedit /enum"]
   }
 
