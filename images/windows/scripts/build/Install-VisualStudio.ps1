@@ -42,6 +42,14 @@ if (Test-IsWin19) {
         -ExpectedSignature 'E4C5C5FCDB68B930EE4E19BC25D431EF6D864C51'
 }
 
+if (Test-IsWin25) {
+    Write-Host "This is win25"
+}
+
+if (Test-IsWin22 -or Test-IsWin25) {
+    Write-Host "This is win22 or win25"
+}
+
 if (Test-IsWin22 -or Test-IsWin25) {
     # Install Windows 10 SDK version 10.0.17763
     Write-Host "Install Windows 10 SDK version 10.0.17763"
