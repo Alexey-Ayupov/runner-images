@@ -46,11 +46,19 @@ if (Test-IsWin25) {
     Write-Host "This is win25"
 }
 
-if (Test-IsWin22 -or Test-IsWin25) {
-    Write-Host "This is win22 or win25"
+if ((Test-IsWin22) -or (Test-IsWin25)) {
+    Write-Host "1 This is win22 or win25"
 }
 
-if (Test-IsWin22 - or Test-IsWin25) {
+if (Test-IsWin22 -and Test-IsWin25) {
+    Write-Host "2 This is win22 or win25"
+}
+
+if (-not (Test-IsWin19)) {
+    Write-Host "3 This is win22 or win25"
+}
+
+if (-not (Test-IsWin19)) {
     # Install Windows 10 SDK version 10.0.17763
     Install-Binary -Type EXE `
         -Url 'https://go.microsoft.com/fwlink/p/?LinkID=2033908' `

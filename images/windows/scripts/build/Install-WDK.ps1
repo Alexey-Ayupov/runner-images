@@ -14,7 +14,7 @@ if (Test-IsWin19) {
     $wdkUrl = "https://go.microsoft.com/fwlink/?linkid=2166289"
     $wdkSignatureThumbprint = "914A09C2E02C696AF394048BCB8D95449BCD5B9E"
     $wdkExtensionPath = "C:\Program Files (x86)\Windows Kits\10\Vsix\VS2019\WDK.vsix"
-} elseif (Test-IsWin22) {
+} elseif (-not (Test-IsWin19)) {
     # SDK is available through Visual Studio
     $wdkUrl = "https://go.microsoft.com/fwlink/?linkid=2249371"
     $wdkSignatureThumbprint = "7C94971221A799907BB45665663BBFD587BAC9F8"
