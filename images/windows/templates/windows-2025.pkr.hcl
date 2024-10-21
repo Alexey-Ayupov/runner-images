@@ -347,10 +347,6 @@ build {
     restart_timeout = "10m"
   }
 
-  provisioner "windows-shell" {
-    inline = ["wmic product where \"name like '%%microsoft azure powershell%%'\" call uninstall /nointeractive"]
-  }
-
   provisioner "powershell" {
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
     scripts          = [
