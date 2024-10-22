@@ -348,6 +348,10 @@ build {
   }
 
   provisioner "powershell" {
+    inline            = ["(Get-CimInstance -ClassName Win32_Process).name | sort"]
+  }
+
+  provisioner "powershell" {
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
     scripts          = [
       "${path.root}/../scripts/build/Install-ActionsCache.ps1",
@@ -397,6 +401,10 @@ build {
       "${path.root}/../scripts/build/Install-CodeQLBundle.ps1",
       "${path.root}/../scripts/build/Configure-Diagnostics.ps1"
     ]
+  }
+
+  provisioner "powershell" {
+    inline            = ["(Get-CimInstance -ClassName Win32_Process).name | sort"]
   }
 
   provisioner "powershell" {
