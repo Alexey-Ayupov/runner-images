@@ -245,21 +245,13 @@ build {
     elevated_password = "${var.install_password}"
     elevated_user     = "${var.install_user}"
     inline            = [
-      "bcdedit /enum",
-      "bcdedit.exe /set TESTSIGNING ON"
+      "bcdedit.exe /set TESTSIGNING ON",
+      "bcdedit.exe /set hypervisorlaunchtype auto"
     ]
-  }
-
-  provisioner "powershell" {
-    inline            = ["bcdedit.exe /set hypervisorlaunchtype auto"]
   }
 
   provisioner "windows-restart" {
     restart_timeout = "10m"
-  }
-
-  provisioner "powershell" {
-    inline            = ["bcdedit /enum"]
   }
 
   provisioner "powershell" {
@@ -348,10 +340,6 @@ build {
   }
 
   provisioner "powershell" {
-    inline            = ["(Get-CimInstance -ClassName Win32_Process).name | sort"]
-  }
-
-  provisioner "powershell" {
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
     scripts          = [
       "${path.root}/../scripts/build/Install-ActionsCache.ps1",
@@ -431,8 +419,44 @@ build {
     pause_before     = "2m0s"
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
     scripts          = [
-      "${path.root}/../scripts/build/Install-WindowsUpdatesAfterReboot.ps1"
+      "${path.root}/../scripts/build/Install-WindowsUpdatesAfterReboot.ps1",
+      "${path.root}/../scripts/tests/RunAll-Tests.ps1"
     ]
+  }
+
+  provisioner "powershell" {
+    inline = ["if (-not (Test-Path ${var.image_folder}\\tests\\testResults.xml)) { throw '${var.image_folder}\\tests\\testResults.xml not found' }"]
+  }
+
+  provisioner "powershell" {
+    environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_FOLDER=${var.image_folder}"]
+    inline           = ["pwsh -File '${var.image_folder}\\SoftwareReport\\Generate-SoftwareReport.ps1'"]
+  }
+
+  provisioner "powershell" {
+    inline = ["if (-not (Test-Path C:\\software-report.md)) { throw 'C:\\software-report.md not found' }", "if (-not (Test-Path C:\\software-report.json)) { throw 'C:\\software-report.json not found' }"]
+  }
+
+  provisioner "file" {
+    destination = "${path.root}/../Windows2022-Readme.md"
+    direction   = "download"
+    source      = "C:\\software-report.md"
+  }
+
+  provisioner "file" {
+    destination = "${path.root}/../software-report.json"
+    direction   = "download"
+    source      = "C:\\software-report.json"
+  }
+
+  provisioner "powershell" {
+    environment_vars = ["INSTALL_USER=${var.install_user}"]
+    scripts          = [
+      "${path.root}/../scripts/build/Install-NativeImages.ps1",
+      "${path.root}/../scripts/build/Configure-System.ps1",
+      "${path.root}/../scripts/build/Configure-User.ps1"
+    ]
+    skip_clean       = true
   }
 
   provisioner "windows-restart" {

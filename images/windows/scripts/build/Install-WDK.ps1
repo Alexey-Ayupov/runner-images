@@ -20,7 +20,7 @@ if (Test-IsWin19) {
     $wdkSignatureThumbprint = "7C94971221A799907BB45665663BBFD587BAC9F8"
     $wdkExtensionPath = "C:\Program Files (x86)\Windows Kits\10\Vsix\VS2022\*\WDK.vsix"
 } else {
-    throw "Invalid version of Visual Studio is found. Either 2019 or 2022 are required"
+    throw "Invalid version of Visual Studio is found. Either 2019, 2022 or 2025 are required"
 }
 
 # Install all features without showing the GUI using wdksetup.exe
