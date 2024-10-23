@@ -18,9 +18,21 @@ foreach ($feature in $windowsFeatures) {
             IncludeAllSubFeature   = [System.Convert]::ToBoolean($feature.includeAllSubFeatures)
             IncludeManagementTools = [System.Convert]::ToBoolean($feature.includeManagementTools)
         }
-        $result = Install-WindowsFeature @arguments
-
-        $resultSuccess = $result.Success
+        $count = 1
+        while ($true) {
+            $result = Install-WindowsFeature @arguments
+            $resultSuccess = $result.Success
+            if ($resultSuccess) {
+                break
+            } else {
+                $count++
+                if ($count -ge 10) {
+                    Write-Host "Could not activate '$($feature.name)' after $count attempts"
+                    exit 1
+                }
+                Start-Sleep -Seconds 10
+            }
+        }
     }
 
     if ($resultSuccess) {

@@ -161,6 +161,7 @@
         "mingw": []
     },
     "windowsFeatures": [
+        { "name": "NET-Framework-Features", "includeAllSubFeatures": true },
         { "name": "Containers" },
         { "name": "Hyper-V", "includeAllSubFeatures": true },
         { "name": "HypervisorPlatform", "optionalFeature": true },
@@ -169,7 +170,8 @@
         { "name": "VirtualMachinePlatform", "optionalFeature": true },
         { "name": "NET-Framework-45-Features", "includeAllSubFeatures": true },
         { "name": "Client-ProjFS", "optionalFeature": true },
-        { "name": "Wireless-Networking" }
+        { "name": "Wireless-Networking" },
+        { "name": "Microsoft-Windows-Subsystem-Linux" }
     ],
     "visualStudio": {
         "version" : "2022",
