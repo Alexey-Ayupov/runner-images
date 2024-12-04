@@ -4,6 +4,23 @@
 ##  Supply chain security: Alibaba Cloud CLI - checksum validation
 ################################################################################
 
+<#metadata
+{
+    "dependsOn": "none",
+    "file": "Install-AliyunCli.ps1",
+    "description": "Install Alibaba Cloud CLI",
+    "softwareReport": {
+        "osSupported": [
+            "win19",
+            "win22"
+        ],
+        "Header": "CLI Tools",
+        "name": "Alibaba Cloud CLI",
+        "function": "Get-AlibabaCLIVersion"
+    }
+}
+metadata#>
+
 Write-Host "Download Latest aliyun-cli archive"
 $downloadUrl = Resolve-GithubReleaseAssetUrl `
     -Repo "aliyun/aliyun-cli" `
