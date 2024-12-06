@@ -7,7 +7,7 @@
 # more: https://github.com/actions/runner-images-internal/issues/5320
 #       https://github.com/actions/runner-images/issues/5301#issuecomment-1648292990
 #
-
+if (-not (Test-IsWin25)) {
 Write-Host "Warmup 'devenv.exe /updateconfiguration'"
 $vsInstallRoot = (Get-VisualStudioInstance).InstallationPath
 cmd.exe /c "`"$vsInstallRoot\Common7\IDE\devenv.exe`" /updateconfiguration"
@@ -28,7 +28,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 # TortoiseSVN not installed on Windows 2025 image due to Sysprep issues
-if (-not (Test-IsWin25)) {
+
     # disable TSVNCache.exe
     $registryKeyPath = 'HKCU:\Software\TortoiseSVN'
     if (-not(Test-Path -Path $registryKeyPath)) {
@@ -41,13 +41,16 @@ if (-not (Test-IsWin25)) {
         throw "Failed to copy HKCU\Software\TortoiseSVN to HKLM\DEFAULT\Software\TortoiseSVN"
     }
 }
-# Accept by default "Send Diagnostic data to Microsoft" consent.
-if (Test-IsWin25) {
-    $registryKeyPath = 'HKLM:\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Privacy'
-    New-ItemProperty -Path $registryKeyPath -Name PrivacyConsentPresentationVersion -PropertyType DWORD -Value 3 | Out-Null
-    New-ItemProperty -Path $registryKeyPath -Name PrivacyConsentSettingsValidMask -PropertyType DWORD -Value 4 | Out-Null
-    New-ItemProperty -Path $registryKeyPath -Name PrivacyConsentSettingsVersion -PropertyType DWORD -Value 5 | Out-Null
-}
+
+Mount-RegistryHive `
+    -FileName "C:\Users\Default\NTUSER.DAT" `
+    -SubKey "HKLM\DEFAULT"
+
+# disable the privacy consent dialog
+$registryKeyPath = 'HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Privacy'
+New-ItemProperty -Path $registryKeyPath -Name PrivacyConsentPresentationVersion -PropertyType DWORD -Value 3
+New-ItemProperty -Path $registryKeyPath -Name PrivacyConsentSettingsValidMask -PropertyType DWORD -Value 4
+New-ItemProperty -Path $registryKeyPath -Name PrivacyConsentSettingsVersion -PropertyType DWORD -Value 5
 
 Dismount-RegistryHive "HKLM\DEFAULT"
 
