@@ -54,10 +54,10 @@ New-ItemProperty -Path $registryKeyPath -Name PrivacyConsentSettingsVersion -Pro
 
 Dismount-RegistryHive "HKLM\DEFAULT"
 
-# Remove the "installer" (var.install_user) user profile for Windows 2025 image
+<# Remove the "installer" (var.install_user) user profile for Windows 2025 image
 if (Test-IsWin25) {
     Get-CimInstance -ClassName Win32_UserProfile | where-object {$_.LocalPath -match $env:INSTALL_USER} | Remove-CimInstance -Confirm:$false
     & net user $env:INSTALL_USER /DELETE
 }
-
+#>
 Write-Host "Configure-User.ps1 - completed"
