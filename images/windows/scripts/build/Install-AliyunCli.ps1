@@ -14,7 +14,8 @@
             "win19",
             "win22"
         ],
-        "Header": "CLI Tools",
+        "header": "CLI Tools",
+        "varName": "cliTools",
         "name": "Alibaba Cloud CLI",
         "function": "Get-AlibabaCLIVersion"
     }
