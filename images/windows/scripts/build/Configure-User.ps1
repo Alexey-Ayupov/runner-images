@@ -47,7 +47,7 @@ Mount-RegistryHive `
     -SubKey "HKLM\DEFAULT"
 
 # disable the privacy consent dialog
-$registryKeyPath = 'HKLM\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Privacy'
+$registryKeyPath = 'HKLM:\DEFAULT\SOFTWARE\Microsoft\Windows\CurrentVersion\Privacy'
 New-ItemProperty -Path $registryKeyPath -Name PrivacyConsentPresentationVersion -PropertyType DWORD -Value 3
 New-ItemProperty -Path $registryKeyPath -Name PrivacyConsentSettingsValidMask -PropertyType DWORD -Value 4
 New-ItemProperty -Path $registryKeyPath -Name PrivacyConsentSettingsVersion -PropertyType DWORD -Value 5
