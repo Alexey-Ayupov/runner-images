@@ -285,6 +285,8 @@ build {
     ]
   }
 
+# your code here
+
   provisioner "powershell" {
     inline = ["Set-Content -Value 'Image-4-tb' -Path 'C:\\software-report.md'", "Set-Content -Value '{\"Image\":\"4-tb\"}' -Path 'C:\\software-report.json'", "if (-not (Test-Path C:\\software-report.md)) { throw 'C:\\software-report.md not found' }", "if (-not (Test-Path C:\\software-report.json)) { throw 'C:\\software-report.json not found' }"]
   }
@@ -304,7 +306,8 @@ build {
   provisioner "powershell" {
     environment_vars = ["INSTALL_USER=${var.install_user}"]
     scripts          = [
-      "${path.root}/../scripts/build/Configure-System.ps1"
+      "${path.root}/../scripts/build/Configure-System.ps1",
+      "${path.root}/../scripts/build/Configure-User.ps1"
     ]
     skip_clean       = true
   }
