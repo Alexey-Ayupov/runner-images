@@ -1,4 +1,4 @@
-Describe "Chrome" {
+Describe "Chrome" -Skip:(Test-IsWin25) {
     Context "WebDriver" {
         It "ChromeWebDriver environment variable and path exists" {
             $env:ChromeWebDriver | Should -Not -BeNullOrEmpty

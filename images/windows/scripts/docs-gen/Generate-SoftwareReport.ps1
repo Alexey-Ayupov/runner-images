@@ -148,11 +148,12 @@ if (-not (Test-IsWin25)) {
 $rustToolsPackages.AddToolVersion("Clippy", $(Get-RustClippyVersion))
 $rustToolsPackages.AddToolVersion("Rustfmt", $(Get-RustfmtVersion))
 
+if (Test-IsWin25) {
 # Browsers and Drivers
 $browsersAndWebdrivers = $installedSoftware.AddHeader("Browsers and Drivers")
 $browsersAndWebdrivers.AddNodes($(Build-BrowserSection))
 $browsersAndWebdrivers.AddHeader("Environment variables").AddTable($(Build-BrowserWebdriversEnvironmentTable))
-
+}
 # Java
 $installedSoftware.AddHeader("Java").AddTable($(Get-JavaVersions))
 
