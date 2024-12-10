@@ -1,8 +1,4 @@
 $browsers = @{
-    chrome = @{
-        Name="Google Chrome";
-        File="chrome.exe"
-    };
     edge = @{
         Name="Microsoft Edge";
         File="msedge.exe"
@@ -14,10 +10,6 @@ $browsers = @{
 }
 
 $webDrivers = @{
-    chrome = @{
-        Name="Chrome Driver";
-        Path="C:\SeleniumWebDrivers\ChromeDriver"
-    };
     edge = @{
         Name="Microsoft Edge Driver";
         Path="C:\SeleniumWebDrivers\EdgeDriver"
@@ -34,8 +26,6 @@ $webDrivers = @{
 
 function Build-BrowserSection {
     return @(
-        $(Get-BrowserVersion -Browser "chrome"),
-        $(Get-SeleniumWebDriverVersion -Driver "chrome"),
         $(Get-BrowserVersion -Browser "edge"),
         $(Get-SeleniumWebDriverVersion -Driver "edge"),
         $(Get-BrowserVersion -Browser "firefox"),
@@ -75,10 +65,6 @@ function Get-SeleniumVersion {
 
 function Build-BrowserWebdriversEnvironmentTable {
     return @(
-        @{
-            "Name" = "CHROMEWEBDRIVER"
-            "Value" = $env:CHROMEWEBDRIVER
-        },
         @{
             "Name" = "EDGEWEBDRIVER"
             "Value" = $env:EDGEWEBDRIVER
