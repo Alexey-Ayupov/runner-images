@@ -70,6 +70,21 @@ foreach ($line in $softReport) {
 Set-Content -Path "C:\work\runner-images\images\windows\scripts\docs-gen\Generate-SoftwareReport-test.ps1" -Value $newSoftReport
 
 
+
+$hclitem = @{
+    environment_vars = @("TRY_TO_INSTALL='1'", "IMAGE_FOLDER=`${var.image_os}")
+    scripts = @("`${path.root}/../scripts/build/Install-some1.ps1", "`${path.root}/../scripts/build/Install-some2.ps1", "`${path.root}/../scripts/build/Install-some3.ps1")
+    elevated_password = "`${var.install_password}"
+    elevated_user = "`${var.install_user}"
+}
+
+foreach ($key in $hclitem.Keys) {
+    "{0} = {1}" -f "$key", "$($hclitem.$key | ConvertTo-Json -Compress)"
+}
+
+#$testvar = "{0} = {1}" -f "$($hclitem.Keys | Where-Object {$_ -eq "environment_vars"})", "$($hclitem.environment_vars | ConvertTo-Json -Compress)"
+
+
 <#
 get-content -path "C:\work\runner-images\images\windows\scripts\docs-gen\Generate-SoftwareReport.ps1" -TotalCount 21 |
     Set-Content -Path "C:\work\runner-images\images\windows\scripts\docs-gen\Generate-SoftwareReport-test.ps1"
