@@ -264,7 +264,10 @@ build {
   }
 
   provisioner "powershell" {
-    inline = ["& wsl.exe --status", "& wsl.exe --install"]
+    environment_vars = ["TRY_TO_INSTALL='1'"]
+    scripts          = [
+      "${path.root}/../scripts/build/Install-WSL2.ps1"
+    ]
   }
 
   provisioner "windows-restart" {
@@ -295,7 +298,10 @@ build {
   }
 
   provisioner "powershell" {
-    inline = ["& wsl.exe --status", "& wsl.exe --install Ubuntu"]
+    environment_vars = ["TRY_TO_INSTALL='2'"]
+    scripts          = [
+      "${path.root}/../scripts/build/Install-WSL2.ps1"
+    ]
   }
 
   provisioner "powershell" {
