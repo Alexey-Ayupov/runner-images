@@ -243,6 +243,12 @@ build {
     inline = ["if (-not ((net localgroup Administrators) -contains '${var.install_user}')) { exit 1 }"]
   }
 
+  provisioner "windows-shell" {
+    inline = [
+      "wsl --install"
+    ]
+  }
+
   provisioner "powershell" {
     elevated_password = "${var.install_password}"
     elevated_user     = "${var.install_user}"
