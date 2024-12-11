@@ -15,7 +15,6 @@ Write-Host "Clean up various directories"
     "$env:SystemRoot\logs",
     "$env:SystemRoot\winsxs\manifestcache",
     "$env:SystemRoot\Temp",
-    $(if(Test-IsWin25){"$env:SystemRoot\Installer\*"}),
     "$env:SystemDrive\Users\$env:INSTALL_USER\AppData\Local\Temp",
     "$env:TEMP",
     "$env:AZURE_CONFIG_DIR\logs",
