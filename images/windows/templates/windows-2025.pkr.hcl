@@ -250,6 +250,13 @@ build {
   }
 
   provisioner "powershell" {
+    environment_vars = ["TRY_TO_INSTALL='1'"]
+    scripts          = [
+      "${path.root}/../scripts/build/Install-WSL2.ps1"
+    ]
+  }
+
+  provisioner "powershell" {
     environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_OS=${var.image_os}", "AGENT_TOOLSDIRECTORY=${var.agent_tools_directory}", "IMAGEDATA_FILE=${var.imagedata_file}", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     execution_policy = "unrestricted"
     scripts          = [
