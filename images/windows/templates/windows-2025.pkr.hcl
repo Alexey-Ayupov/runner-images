@@ -250,6 +250,11 @@ build {
   }
 
   provisioner "powershell" {
+    valid_exit_codes = [
+      "0",
+      "1",
+      "2"
+    ]
     environment_vars = ["TRY_TO_INSTALL='1'"]
     scripts          = [
       "${path.root}/../scripts/build/Install-WSL2.ps1"
@@ -271,6 +276,11 @@ build {
   }
 
   provisioner "powershell" {
+    valid_exit_codes = [
+      "0",
+      "1",
+      "2"
+    ]
     environment_vars = ["TRY_TO_INSTALL='1'"]
     scripts          = [
       "${path.root}/../scripts/build/Install-WSL2.ps1"
@@ -305,6 +315,11 @@ build {
   }
 
   provisioner "powershell" {
+    valid_exit_codes = [
+      "0",
+      "1",
+      "2"
+    ]
     environment_vars = ["TRY_TO_INSTALL='2'"]
     scripts          = [
       "${path.root}/../scripts/build/Install-WSL2.ps1"
