@@ -243,28 +243,10 @@ build {
     inline = ["if (-not ((net localgroup Administrators) -contains '${var.install_user}')) { exit 1 }"]
   }
 
-  provisioner "windows-shell" {
-    inline = [
-      "wsl --install"
-    ]
-  }
-
   provisioner "powershell" {
     elevated_password = "${var.install_password}"
     elevated_user     = "${var.install_user}"
     inline            = ["bcdedit.exe /set TESTSIGNING ON"]
-  }
-
-  provisioner "powershell" {
-    valid_exit_codes = [
-      "0",
-      "1",
-      "2"
-    ]
-    environment_vars = ["TRY_TO_INSTALL='1'"]
-    scripts          = [
-      "${path.root}/../scripts/build/Install-WSL2.ps1"
-    ]
   }
 
   provisioner "powershell" {
@@ -282,12 +264,9 @@ build {
   }
 
   provisioner "powershell" {
-    valid_exit_codes = [
-      "0",
-      "1",
-      "2"
-    ]
-    environment_vars = ["TRY_TO_INSTALL='1'"]
+    elevated_password = "${var.install_password}"
+    elevated_user     = "${var.install_user}"
+    environment_vars = ["TRY_TO_INSTALL='1'", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts          = [
       "${path.root}/../scripts/build/Install-WSL2.ps1"
     ]
@@ -321,12 +300,7 @@ build {
   }
 
   provisioner "powershell" {
-    valid_exit_codes = [
-      "0",
-      "1",
-      "2"
-    ]
-    environment_vars = ["TRY_TO_INSTALL='2'"]
+    environment_vars = ["TRY_TO_INSTALL='2'", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts          = [
       "${path.root}/../scripts/build/Install-WSL2.ps1"
     ]

@@ -1,17 +1,24 @@
 Write-Host "Install WSL2"
 
-$ErrorActionPreviousValue = $ErrorActionPreference
-$ErrorActionPreference = 'SilentlyContinue'
+if ($env:TRY_TO_INSTALL = "1") {
+    $version = (Get-GithubReleasesByVersion -Repo "microsoft/WSL" -Version "latest").version
+    $downloadUrl =  Resolve-GithubReleaseAssetUrl `
+    -Repo "microsoft/WSL" `
+    -Version $version `
+    -UrlMatchPattern "wsl.*.x64.msi"
 
-& wsl --status | Out-File -FilePath "C:\image\wsl-logs.txt"
-if ($env:TRY_TO_INSTALL -eq "1") {
-    $wsllog = & wsl --install | Out-File -FilePath "C:\image\wsl-logs.txt" -Append
+    Install-Binary -Type MSI `
+        -Url $downloadUrl `
+        -ExpectedSHA256Sum "CD3F2A68A1A5836F6A1CC9965A7F5F54DB267CA221EAA87DF29345AB7957AEC4"
+} elseif ($env:TRY_TO_INSTALL = "2") {
+    wsl --status
+    $wsllog = wsl --status
     Write-Host $wsllog
-} elseif ($env:TRY_TO_INSTALL -eq "2") {
-    $wsllog = & wsl --install Ubuntu | Out-File -FilePath "C:\image\wsl-logs.txt" -Append
+    Write-Host "Getting exact WSL version"
+    $WSLappxVersion = (Get-AppxPackage -Name "MicrosoftCorporationII.WindowsSubsystemForLinux").version
+    Write-Host "WSL version: $WSLappxVersion"
+    Write-Host "Installing Ubuntu"
+    wsl --install Ubuntu
+    $wsllog = wsl --install Ubuntu
     Write-Host $wsllog
 }
-
-Get-Content-path "C:\image\wsl-logs.txt"
-
-$ErrorActionPreference = $ErrorActionPreviousValue
