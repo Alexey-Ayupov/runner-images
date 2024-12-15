@@ -260,14 +260,23 @@ build {
     inline            = ["bcdedit.exe /set TESTSIGNING ON"]
   }
 
+  provisioner "windows-restart" {
+    restart_timeout = "10m"
+  }
 
+  provisioner "powershell" {
+    environment_vars = ["TRY_TO_INSTALL='2'", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
+    scripts          = [
+      "${path.root}/../scripts/build/Install-WSL2.ps1"
+    ]
+  }
 
   provisioner "powershell" {
     environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_OS=${var.image_os}", "AGENT_TOOLSDIRECTORY=${var.agent_tools_directory}", "IMAGEDATA_FILE=${var.imagedata_file}", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     execution_policy = "unrestricted"
     scripts          = [
+      "${path.root}/../scripts/build/Configure-WindowsDefender.ps1",
       "${path.root}/../scripts/build/Configure-PowerShell.ps1",
-      "${path.root}/../scripts/build/Install-PowerShellModules.ps1",
       "${path.root}/../scripts/build/Configure-BaseImage.ps1",
       "${path.root}/../scripts/build/Configure-ImageDataFile.ps1",
       "${path.root}/../scripts/build/Configure-SystemEnvironment.ps1",
@@ -276,10 +285,9 @@ build {
   }
 
   provisioner "windows-restart" {
-    check_registry        = true
-    restart_check_command = "powershell -command \"& {while ( (Get-WindowsOptionalFeature -Online -FeatureName Containers -ErrorAction SilentlyContinue).State -ne 'Enabled' ) { Start-Sleep 30; Write-Output 'InProgress' }}\""
-    restart_timeout       = "10m"
+    restart_timeout = "10m"
   }
+
 
   provisioner "powershell" {
     inline = ["Set-Service -Name wlansvc -StartupType Manual", "if ($(Get-Service -Name wlansvc).Status -eq 'Running') { Stop-Service -Name wlansvc}"]
