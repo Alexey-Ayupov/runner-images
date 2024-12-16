@@ -277,6 +277,7 @@ build {
     scripts          = [
       "${path.root}/../scripts/build/Configure-WindowsDefender.ps1",
       "${path.root}/../scripts/build/Configure-PowerShell.ps1",
+      "${path.root}/../scripts/build/Install-PowerShellModules.ps1",
       "${path.root}/../scripts/build/Configure-BaseImage.ps1",
       "${path.root}/../scripts/build/Configure-ImageDataFile.ps1",
       "${path.root}/../scripts/build/Configure-SystemEnvironment.ps1",
