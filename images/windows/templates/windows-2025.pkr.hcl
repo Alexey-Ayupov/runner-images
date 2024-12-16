@@ -309,14 +309,6 @@ build {
     source      = "C:\\software-report.json"
   }
 
-  provisioner "powershell" {
-    environment_vars = ["INSTALL_USER=${var.install_user}"]
-    scripts          = [
-      "${path.root}/../scripts/build/Configure-System.ps1"
-    ]
-    skip_clean       = true
-  }
-
   provisioner "windows-restart" {
     restart_timeout = "10m"
   }
