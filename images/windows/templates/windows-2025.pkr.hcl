@@ -294,15 +294,6 @@ build {
   }
 
   provisioner "powershell" {
-    elevated_password = "${var.install_password}"
-    elevated_user     = "${var.install_user}"
-    environment_vars  = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
-    scripts           = [
-      "${path.root}/../scripts/build/Configure-GDIProcessHandleQuota.ps1"
-    ]
-  }
-
-  provisioner "powershell" {
     inline = ["Set-Content -Value 'Image-4-tb' -Path 'C:\\software-report.md'", "Set-Content -Value '{\"Image\":\"4-tb\"}' -Path 'C:\\software-report.json'", "if (-not (Test-Path C:\\software-report.md)) { throw 'C:\\software-report.md not found' }", "if (-not (Test-Path C:\\software-report.json)) { throw 'C:\\software-report.json not found' }"]
   }
 
