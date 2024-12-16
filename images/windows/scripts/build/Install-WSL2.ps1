@@ -18,11 +18,11 @@ if ($env:TRY_TO_INSTALL -eq "'1'") {
     Write-Host "finished!!!"
 
 } elseif ($env:TRY_TO_INSTALL -eq "'2'") {
-    & wsl --status
+    wsl.exe --status
     Write-Host "Getting exact WSL version"
     $WSLappxVersion = (Get-AppxPackage -Name "MicrosoftCorporationII.WindowsSubsystemForLinux").version
-    & wsl --status | Out-File "C:\image\wsl.log"
+    wsl.exe --status | Out-File "C:\image\wsl.log"
     Write-Host "WSL version: $WSLappxVersion"
     Write-Host "Installing Ubuntu"
-    & wsl --install Ubuntu | Out-File "C:\image\wsl.log" -Append
+    wsl.exe --install Ubuntu | Out-File "C:\image\wsl.log" -Append
 }
