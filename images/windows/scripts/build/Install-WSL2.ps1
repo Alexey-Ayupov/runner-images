@@ -13,7 +13,12 @@ if ($env:TRY_TO_INSTALL -eq "'1'") {
         -Url $downloadUrl `
         -ExpectedSHA256Sum "CD3F2A68A1A5836F6A1CC9965A7F5F54DB267CA221EAA87DF29345AB7957AEC4"
 
+    Write-Host "performing wsl --install --no-distribution"
+    wsl.exe --install --no-distribution
+    Write-Host "finished!!!"
+
 } elseif ($env:TRY_TO_INSTALL -eq "'2'") {
+    & wsl --status
     Write-Host "Getting exact WSL version"
     $WSLappxVersion = (Get-AppxPackage -Name "MicrosoftCorporationII.WindowsSubsystemForLinux").version
     & wsl --status | Out-File "C:\image\wsl.log"
