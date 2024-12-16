@@ -243,15 +243,17 @@ build {
     inline = ["if (-not ((net localgroup Administrators) -contains '${var.install_user}')) { exit 1 }"]
   }
 
-  provisioner "powershell" {
-    inline = ["Enable-WindowsOptionalFeature -Online -FeatureName 'HypervisorPlatform' -NoRestart"]
-  }
+
 
   provisioner "powershell" {
     environment_vars = ["TRY_TO_INSTALL='1'", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts          = [
       "${path.root}/../scripts/build/Install-WSL2.ps1"
     ]
+  }
+
+  provisioner "powershell" {
+    inline = ["Enable-WindowsOptionalFeature -Online -FeatureName 'HypervisorPlatform' -NoRestart"]
   }
 
   provisioner "powershell" {
@@ -278,7 +280,6 @@ build {
       "${path.root}/../scripts/build/Configure-WindowsDefender.ps1",
       "${path.root}/../scripts/build/Configure-PowerShell.ps1",
       "${path.root}/../scripts/build/Install-PowerShellModules.ps1",
-      "${path.root}/../scripts/build/Configure-BaseImage.ps1",
       "${path.root}/../scripts/build/Configure-ImageDataFile.ps1",
       "${path.root}/../scripts/build/Configure-SystemEnvironment.ps1",
       "${path.root}/../scripts/build/Configure-DotnetSecureChannel.ps1"
@@ -308,13 +309,6 @@ build {
     scripts           = [
       "${path.root}/../scripts/build/Configure-DynamicPort.ps1",
       "${path.root}/../scripts/build/Configure-GDIProcessHandleQuota.ps1",
-    ]
-  }
-
-  provisioner "powershell" {
-    environment_vars = ["TRY_TO_INSTALL='2'", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
-    scripts          = [
-      "${path.root}/../scripts/build/Install-WSL2.ps1"
     ]
   }
 

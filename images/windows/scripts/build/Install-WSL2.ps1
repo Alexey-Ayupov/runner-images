@@ -13,16 +13,11 @@ if ($env:TRY_TO_INSTALL -eq "1") {
         -Url $downloadUrl `
         -ExpectedSHA256Sum "CD3F2A68A1A5836F6A1CC9965A7F5F54DB267CA221EAA87DF29345AB7957AEC4"
 
-    wsl --status
 } elseif ($env:TRY_TO_INSTALL -eq "2") {
-    wsl --status
-    $wsllog = wsl --status
-    Write-Host $wsllog
+    & wsl --status | Out-File "C:\image\wsl.log"
     Write-Host "Getting exact WSL version"
     $WSLappxVersion = (Get-AppxPackage -Name "MicrosoftCorporationII.WindowsSubsystemForLinux").version
     Write-Host "WSL version: $WSLappxVersion"
     Write-Host "Installing Ubuntu"
-    wsl --install Ubuntu
-    $wsllog = wsl --install Ubuntu
-    Write-Host $wsllog
+    & wsl --install Ubuntu | Out-File "C:\image\wsl.log" -Append
 }
