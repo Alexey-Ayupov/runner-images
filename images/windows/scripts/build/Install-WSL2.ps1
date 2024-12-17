@@ -8,7 +8,8 @@ if (Test-IsWin25) {
     if (-not (Test-Path -Path $setupPath)) {
         New-Item -Path $setupPath -ItemType Directory -Force | Out-Null
     }
-    Expand-7ZipArchive -Path $filePath -DestinationPath $setupPath
+    Expand-Archive -Path $filePath -DestinationPath $setupPath
+    #Expand-7ZipArchive -Path $filePath -DestinationPath $setupPath
     & $setupPath\sdelete64.exe -z C: /accepteula
 }
 
