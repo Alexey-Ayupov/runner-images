@@ -111,7 +111,6 @@
     },
     "windowsFeatures": [
         { "name": "Containers" },
-        { "name": "Microsoft-Windows-Subsystem-Linux", "optionalFeature": true },
         { "name": "VirtualMachinePlatform", "optionalFeature": true },
         { "name": "NET-Framework-45-Features", "includeAllSubFeatures": true },
         { "name": "Client-ProjFS", "optionalFeature": true },

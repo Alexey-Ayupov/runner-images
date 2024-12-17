@@ -2,17 +2,6 @@ Write-Host "Install WSL2"
 
 Write-Host "`$env:TRY_TO_INSTALL - $env:TRY_TO_INSTALL"
 
-if (Test-IsWin25) {
-    $filePath = Invoke-DownloadWithRetry -Url "https://download.sysinternals.com/files/SDelete.zip"
-    $setupPath = Join-Path $env:TEMP_DIR "sDelete"
-    if (-not (Test-Path -Path $setupPath)) {
-        New-Item -Path $setupPath -ItemType Directory -Force | Out-Null
-    }
-    Expand-Archive -Path $filePath -DestinationPath $setupPath
-    #Expand-7ZipArchive -Path $filePath -DestinationPath $setupPath
-    & $setupPath\sdelete64.exe -z C: /accepteula
-}
-
 if ($env:TRY_TO_INSTALL -eq "'1'") {
     $version = (Get-GithubReleasesByVersion -Repo "microsoft/WSL" -Version "latest").version
     $downloadUrl =  Resolve-GithubReleaseAssetUrl `
@@ -24,16 +13,21 @@ if ($env:TRY_TO_INSTALL -eq "'1'") {
         -Url $downloadUrl `
         -ExpectedSHA256Sum "CD3F2A68A1A5836F6A1CC9965A7F5F54DB267CA221EAA87DF29345AB7957AEC4"
 
-    Write-Host "performing wsl --install --no-distribution"
+    Write-Host "Performing wsl --install --no-distribution"
     wsl.exe --install --no-distribution
-    Write-Host "finished!!!"
 
 } elseif ($env:TRY_TO_INSTALL -eq "'2'") {
+    Write-Host "Performing wsl --install Ubuntu --no-launch"
+    wsl.exe --install Ubuntu --no-launch
+    Write-Host "Make the user root the default user"
+    ubuntu.exe -install --root
+    Write-Host "Get wsl status"
     wsl.exe --status
-    Write-Host "Getting exact WSL version"
-    $WSLappxVersion = (Get-AppxPackage -Name "MicrosoftCorporationII.WindowsSubsystemForLinux").version
-    wsl.exe --status | Out-File "C:\image\wsl.log"
-    Write-Host "WSL version: $WSLappxVersion"
-    #Write-Host "Installing Ubuntu"
-    #wsl.exe --install Ubuntu | Out-File "C:\image\wsl.log" -Append
+    Write-Host "Get os-release from Ubuntu"
+    wsl.exe -d Ubuntu cat /etc/os-release
+    Write-host "Uninstalling Ubuntu distribution"
+    wsl.exe --unregister Ubuntu
+    Get-AppxPackage | Where-Object {$_.Name -match "Ubuntu"} | Remove-AppxPackage -AllUsers
+
+    #Invoke-PesterTests -TestFile "WindowsFeatures" -TestName "WSL2"
 }
