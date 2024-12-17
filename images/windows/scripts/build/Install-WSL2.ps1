@@ -2,6 +2,16 @@ Write-Host "Install WSL2"
 
 Write-Host "`$env:TRY_TO_INSTALL - $env:TRY_TO_INSTALL"
 
+if (Test-IsWin25) {
+    $filePath = Invoke-DownloadWithRetry -Url "https://download.sysinternals.com/files/SDelete.zip"
+    $setupPath = Join-Path $env:TEMP_DIR "sDelete"
+    if (-not (Test-Path -Path $setupPath)) {
+        New-Item -Path $setupPath -ItemType Directory -Force | Out-Null
+    }
+    Expand-7ZipArchive -Path $filePath -DestinationPath $setupPath
+    & $setupPath\sdelete64.exe -z C: /accepteula
+}
+
 if ($env:TRY_TO_INSTALL -eq "'1'") {
     $version = (Get-GithubReleasesByVersion -Repo "microsoft/WSL" -Version "latest").version
     $downloadUrl =  Resolve-GithubReleaseAssetUrl `
