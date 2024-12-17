@@ -243,22 +243,9 @@ build {
     inline = ["if (-not ((net localgroup Administrators) -contains '${var.install_user}')) { exit 1 }"]
   }
 
-  provisioner "powershell" {
-    environment_vars = ["TRY_TO_INSTALL=Installation", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
-    scripts          = [
-      "${path.root}/../scripts/build/Install-WSL2.ps1"
-    ]
-  }
 
   provisioner "powershell" {
-    environment_vars = ["TRY_TO_INSTALL=Checking", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
-    scripts          = [
-      "${path.root}/../scripts/build/Install-WSL2.ps1"
-    ]
-  }
-
-  provisioner "powershell" {
-    environment_vars = ["TRY_TO_INSTALL='1'", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
+    environment_vars = ["WSL2_STAGE=Installation", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts          = [
       "${path.root}/../scripts/build/Install-WSL2.ps1"
     ]
@@ -297,7 +284,7 @@ build {
   }
 
   provisioner "powershell" {
-    environment_vars = ["TRY_TO_INSTALL='2'", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
+    environment_vars = ["WSL2_STAGE=Checking", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts          = [
       "${path.root}/../scripts/build/Install-WSL2.ps1",
       "${path.root}/../scripts/build/Install-Docker.ps1",

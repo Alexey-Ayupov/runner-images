@@ -2,7 +2,7 @@ Write-Host "Install WSL2"
 
 Write-Host "`$env:TRY_TO_INSTALL - $env:TRY_TO_INSTALL"
 
-if ($env:TRY_TO_INSTALL -eq "'1'") {
+if ($env:WSL2_STAGE -eq "Installation") {
     $version = (Get-GithubReleasesByVersion -Repo "microsoft/WSL" -Version "latest").version
     $downloadUrl =  Resolve-GithubReleaseAssetUrl `
         -Repo "microsoft/WSL" `
@@ -16,7 +16,7 @@ if ($env:TRY_TO_INSTALL -eq "'1'") {
     Write-Host "Performing wsl --install --no-distribution"
     wsl.exe --install --no-distribution
 
-} elseif ($env:TRY_TO_INSTALL -eq "'2'") {
+} elseif ($env:WSL2_STAGE -eq "Checking") {
     Write-Host "Performing wsl --install Ubuntu --no-launch"
     wsl.exe --install Ubuntu --no-launch
     Write-Host "Make the user root the default user"

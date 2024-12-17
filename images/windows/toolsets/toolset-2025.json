@@ -110,11 +110,11 @@
         "mingw": []
     },
     "windowsFeatures": [
+        { "name": "NET-Framework-Features", "includeAllSubFeatures": true },
         { "name": "Containers" },
         { "name": "VirtualMachinePlatform", "optionalFeature": true },
         { "name": "NET-Framework-45-Features", "includeAllSubFeatures": true },
         { "name": "Client-ProjFS", "optionalFeature": true },
-        { "name": "NET-Framework-Features", "includeAllSubFeatures": true },
         { "name": "Hyper-V", "includeAllSubFeatures": true },
         { "name": "HypervisorPlatform", "optionalFeature": true },
         { "name": "Hyper-V-PowerShell" },
