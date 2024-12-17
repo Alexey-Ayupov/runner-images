@@ -57,4 +57,14 @@ if (Test-IsWin25) {
     & net user $env:INSTALL_USER /DELETE
 }
 
+if (Test-IsWin25) {
+    $filePath = Invoke-DownloadWithRetry -Url "https://download.sysinternals.com/files/SDelete.zip"
+    $setupPath = Join-Path $env:TEMP_DIR "sDelete"
+    if (-not (Test-Path -Path $setupPath)) {
+        New-Item -Path $setupPath -ItemType Directory -Force | Out-Null
+    }
+    Expand-7ZipArchive -Path $filePath -DestinationPath $setupPath
+    & $setupPath\sdelete64.exe -z C: /accepteula
+}
+
 Write-Host "Configure-User.ps1 - completed"
