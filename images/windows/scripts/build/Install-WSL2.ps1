@@ -20,11 +20,11 @@ if ($env:WSL2_STAGE -eq "Installation") {
     Write-Host "Performing wsl --install Ubuntu --no-launch"
     wsl.exe --install Ubuntu --no-launch
     Write-Host "Make the user root the default user"
-    ubuntu.exe -install --root
+    ubuntu.exe install --root
     Write-Host "Get wsl status"
     wsl.exe --status
     Write-Host "Get os-release from Ubuntu"
-    wsl.exe -d Ubuntu cat /etc/os-release
+    wsl.exe -u root -d Ubuntu -- cat /etc/os-release
     Write-host "Uninstalling Ubuntu distribution"
     wsl.exe --unregister Ubuntu
     Get-AppxPackage | Where-Object {$_.Name -match "Ubuntu"} | Remove-AppxPackage -AllUsers
