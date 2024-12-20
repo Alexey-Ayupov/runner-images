@@ -100,3 +100,5 @@ Add-Content -Path "C:\work\runner-images\images\windows\scripts\docs-gen\Generat
 Add-Content -Path "C:\work\runner-images\images\windows\scripts\docs-gen\Generate-SoftwareReport-test.ps1" `
             -Value '$softwareReport.ToMarkdown() | Out-File -FilePath "C:\software-report.md" -Encoding UTF8NoBOM'
 #>
+
+## https://github.com/orgs/community/discussions/25950
