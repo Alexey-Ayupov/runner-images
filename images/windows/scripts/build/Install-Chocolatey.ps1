@@ -3,6 +3,25 @@
 ##  Desc:  Install Chocolatey package manager
 ################################################################################
 
+<#metadata
+{
+    "dependsOn": "none",
+    "file": "Install-Chocolatey.ps1",
+    "description": "Install Chocolatey package manager",
+    "softwareReport": {
+        "osSupported": [
+            "win19",
+            "win22",
+            "win25"
+        ],
+        "header": "Package Management",
+        "varName": "packageManagement",
+        "name": "Chocolatey",
+        "function": "Get-ChocoVersion"
+    }
+}
+metadata#>
+
 Write-Host "Set TLS1.2"
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor "Tls12"
 
