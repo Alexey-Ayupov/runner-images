@@ -234,6 +234,8 @@ build {
     inline = [
       "net user ${var.install_user} ${var.install_password} /add /passwordchg:no /passwordreq:yes /active:yes /Y",
       "net localgroup Administrators ${var.install_user} /add",
+      "net user runneradmin ${var.install_password} /add /passwordchg:no /passwordreq:yes /active:yes /Y",
+      "net localgroup Administrators runneradmin /add",
       "winrm set winrm/config/service/auth @{Basic=\"true\"}",
       "winrm get winrm/config/service/auth"
     ]
@@ -265,6 +267,13 @@ build {
 
   provisioner "powershell" {
     inline = ["Set-Service -Name wlansvc -StartupType Manual", "if ($(Get-Service -Name wlansvc).Status -eq 'Running') { Stop-Service -Name wlansvc}"]
+  }
+
+  provisioner "powershell" {
+    environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
+    scripts          = [
+      "${path.root}/../scripts/build/Configure-runneradmin.ps1"
+    ]
   }
 
   provisioner "powershell" {
