@@ -1,6 +1,6 @@
 
 function Start-AgentAsInteractiveUser([string]$TaskName, [string]$Execute, [PSCredential]$Credential, [int]$MaxAttemptsCount, [int]$DelayBeforeCheckAgentStatusSeconds) {
-    startTime = [DateTime]::Now
+    $startTime = [DateTime]::Now
                 $userName = $Credential.GetNetworkCredential().UserName
                 $userSid = (New-Object System.Security.Principal.NTAccount($userName)).Translate([System.Security.Principal.SecurityIdentifier]).Value
                 $cimSession = New-CimSession -ComputerName $env:COMPUTERNAME -Credential $Credential
