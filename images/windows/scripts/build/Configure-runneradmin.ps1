@@ -42,16 +42,6 @@ Set-ItemProperty $RegistryPath 'AutoAdminLogon' -Value '1' -Type String
 Set-ItemProperty $RegistryPath 'ForceAutoLogon' -Value '1' -Type String
 Set-ItemProperty $RegistryPath 'DefaultUsername' -Value $userName -type String
 Set-ItemProperty $RegistryPath 'DefaultPassword' -Value $userPassword -type String
-# Stop all "winlogon" processes to force AutoLogon without VM reboot
-Get-Process -name winlogon | ForEach-Object { Stop-Process -Id $_.Id }
-
-do {
-    start-sleep -Seconds 15
-} until ((Get-Process -Name 'winlogon' -ErrorAction SilentlyContinue) -ne $null)
-
-$waitJob = Get-Process -Name 'winlogon' -ErrorAction SilentlyContinue
-
-Write-Host "The winlogon process is running with PID $($waitJob.Id)"
 
 Set-WSManQuickConfig -Force -SkipNetworkProfileCheck
 Start-AgentAsInteractiveUser -TaskName 'Runner' -Execute \"$PWD\\run.cmd\" -Credential $credentials
