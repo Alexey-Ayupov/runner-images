@@ -22,10 +22,13 @@ function Start-AgentAsInteractiveUser([string]$TaskName, [string]$Execute, [PSCr
                     $attemptIndex++
                 }
                 $duration = [DateTime]::Now - $startTime
+                Write-Host "Schedule Task state - $((Get-ScheduledTask -TaskName $TaskName -CimSession $cimSession).State)"
                 if ((Get-ScheduledTask -TaskName $TaskName -CimSession $cimSession).State -eq 'Running') {
-                    Write-Host ""Scheduled task with agent was started successfully within $($duration.TotalSeconds) seconds with $attemptIndex attempt""
+                    Write-Host $((Get-ScheduledTask -TaskName $TaskName -CimSession $cimSession).State)
+                    Write-Host "Scheduled task with agent was started successfully within $($duration.TotalSeconds) seconds with $attemptIndex attempt"
                 } else {
-                    Write-Host ""Failed to start scheduled task with agent within $($duration.TotalSeconds) seconds after $attemptIndex attempts""
+                    Write-Host $((Get-ScheduledTask -TaskName $TaskName -CimSession $cimSession).State)
+                    Write-Host "Failed to start scheduled task with agent within $($duration.TotalSeconds) seconds after $attemptIndex attempts"
                     throw 'Failed to start scheduled task with agent'
                 }
                 Remove-CimSession -CimSession $cimSession
