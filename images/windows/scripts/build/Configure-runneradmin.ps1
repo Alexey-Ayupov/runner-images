@@ -11,7 +11,7 @@ function Start-AgentAsInteractiveUser([string]$TaskName, [string]$Execute, [PSCr
                 Register-ScheduledTask -TaskName $TaskName -Action $action -Principal $principal -Settings $settings -CimSession $cimSession
                 $attemptIndex = 1
                 while ($attemptIndex -le $MaxAttemptsCount) {
-                    Write-Host ""Starting scheduled task with agent, attempt $attemptIndex""
+                    Write-Host "Starting scheduled task with agent, attempt $attemptIndex"
                     & { $ErrorActionPreference = 'Continue'; $out = query user $userName 2>&1; Write-Host $out }
                     Start-ScheduledTask -TaskName $TaskName -CimSession $cimSession
                     Start-Sleep -Seconds $DelayBeforeCheckAgentStatusSeconds
@@ -37,17 +37,17 @@ function Start-AgentAsInteractiveUser([string]$TaskName, [string]$Execute, [PSCr
                 Remove-CimSession -CimSession $cimSession
             }
 
-$userName = 'runneradmin'
-$userPassword = $env:USERNAME + [System.GUID]::NewGuid().ToString().ToUpper()
+$CMDScript=@'
+ECHO Please wait... Gathering system information.
+ECHO =========================
+ECHO OPERATING SYSTEM
+systeminfo | findstr /c:"OS Name"
+'@ | Out-File "${env:IMAGE_FOLDER}\run.cmd"
+
+$userName = $env:RUNNERADMIN_USER
+$userPassword = $env:INSTALL_PASSWORD
 $userPasswordSecure = ConvertTo-SecureString $userPassword -AsPlainText -Force
-Set-LocalUser -Name $userName -Password $userPasswordSecure
 $credentials = [System.Management.Automation.PSCredential]::new("$env:COMPUTERNAME\$userName", $userPasswordSecure)
 
-$RegistryPath = 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon'
-Set-ItemProperty $RegistryPath 'AutoAdminLogon' -Value '1' -Type String
-Set-ItemProperty $RegistryPath 'ForceAutoLogon' -Value '1' -Type String
-Set-ItemProperty $RegistryPath 'DefaultUsername' -Value $userName -type String
-Set-ItemProperty $RegistryPath 'DefaultPassword' -Value $userPassword -type String
-
 Set-WSManQuickConfig -Force -SkipNetworkProfileCheck
-Start-AgentAsInteractiveUser -TaskName 'Runner' -Execute \"$PWD\\run.cmd\" -Credential $credentials
+Start-AgentAsInteractiveUser -TaskName 'Runner' -Execute "${env:IMAGE_FOLDER}\run.cmd" -Credential $credentials

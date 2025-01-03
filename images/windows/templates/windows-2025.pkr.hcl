@@ -88,6 +88,11 @@ variable "install_user" {
   default = "installer"
 }
 
+variable "runneradmin_user" {
+  type    = string
+  default = "runneradmin"
+}
+
 variable "location" {
   type    = string
   default = "${env("ARM_RESOURCE_LOCATION")}"
@@ -234,8 +239,8 @@ build {
     inline = [
       "net user ${var.install_user} ${var.install_password} /add /passwordchg:no /passwordreq:yes /active:yes /Y",
       "net localgroup Administrators ${var.install_user} /add",
-      "net user runneradmin ${var.install_password} /add /passwordchg:no /passwordreq:yes /active:yes /Y",
-      "net localgroup Administrators runneradmin /add",
+      "net user ${var.runneradmin_user} ${var.install_password} /add /passwordchg:no /passwordreq:yes /active:yes /Y",
+      "net localgroup Administrators ${var.runneradmin_user} /add",
       "winrm set winrm/config/service/auth @{Basic=\"true\"}",
       "winrm get winrm/config/service/auth"
     ]
@@ -270,7 +275,23 @@ provisioner "powershell" {
   }
 
   provisioner "powershell" {
-    environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
+    elevated_password = "${var.runneradmin_user}"
+    elevated_user     = "${var.install_user}"
+    inline            = [
+      "$RegistryPath = 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon'",
+      "Set-ItemProperty $RegistryPath 'AutoAdminLogon' -Value '1' -Type String",
+      "Set-ItemProperty $RegistryPath 'ForceAutoLogon' -Value '1' -Type String",
+      "Set-ItemProperty $RegistryPath 'DefaultUsername' -Value ${var.runneradmin_user} -type String",
+      "Set-ItemProperty $RegistryPath 'DefaultPassword' -Value ${var.install_password} -type String"
+    ]
+  }
+
+  provisioner "windows-restart" {
+    restart_timeout = "10m"
+  }
+
+  provisioner "powershell" {
+    environment_vars = ["RUNNERADMIN_USER=${var.runneradmin_user}", "INSTALL_PASSWORD=${var.install_password}", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     elevated_password = "${var.install_password}"
     elevated_user     = "${var.install_user}"
     scripts          = [
