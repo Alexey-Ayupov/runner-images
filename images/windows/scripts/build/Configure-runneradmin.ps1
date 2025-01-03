@@ -7,7 +7,7 @@ function Start-AgentAsInteractiveUser([string]$TaskName, [string]$Execute, [PSCr
                 $cimSession = New-CimSession -ComputerName $env:COMPUTERNAME -Credential $Credential
                 $action =  New-ScheduledTaskAction -Execute $Execute -CimSession $cimSession
                 Write-Host "Registering task with action - $action"
-                $settings = New-ScheduledTaskSettingsSet -ExecutionTimeLimit ([TimeSpan]::FromSeconds(0)) -DontStopOnIdleEnd -MultipleInstances IgnoreNew  -CimSession $cimSession
+                $settings = New-ScheduledTaskSettingsSet -ExecutionTimeLimit ([TimeSpan]::FromSeconds(0)) -DontStopOnIdleEnd -MultipleInstances IgnoreNew -CimSession $cimSession
                 $principal = New-ScheduledTaskPrincipal -UserId $userSid -RunLevel Highest -LogonType Interactive -CimSession $cimSession
                 Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false -ErrorAction SilentlyContinue -CimSession $cimSession
                 Register-ScheduledTask -TaskName $TaskName -Action $action -Principal $principal -Settings $settings -CimSession $cimSession
@@ -53,7 +53,9 @@ $userPasswordSecure = ConvertTo-SecureString $userPassword -AsPlainText -Force
 $credentials = [System.Management.Automation.PSCredential]::new("$env:COMPUTERNAME\$userName", $userPasswordSecure)
 
 Set-WSManQuickConfig -Force -SkipNetworkProfileCheck
-Start-AgentAsInteractiveUser -TaskName 'Runner' -Execute "${env:IMAGE_FOLDER}\run.cmd" -Credential $credentials -MaxAttemptsCount 5 -DelayBeforeCheckAgentStatusSeconds 10
+Start-AgentAsInteractiveUser -TaskName 'Runner' -Execute "${env:IMAGE_FOLDER}\run.cmd" -Credential $credentials -MaxAttemptsCount 2 -DelayBeforeCheckAgentStatusSeconds 10
 
-$RegistryPath = 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon'
-Get-ItemProperty -Path $RegistryPath
+#$RegistryPath = 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon'
+#Get-ItemProperty -Path $RegistryPath
+Write-Host "Trying to get task event log"
+(Get-WinEvent -FilterXml "<QueryList><Query Id=`"0`" Path=`"Microsoft-Windows-TaskScheduler/Operational`"><Select Path=`"Microsoft-Windows-TaskScheduler/Operational`">*[EventData/Data[@Name='TaskName']='\$taskName']</Select></Query></QueryList>").Message

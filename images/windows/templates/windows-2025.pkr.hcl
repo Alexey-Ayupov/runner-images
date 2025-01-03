@@ -241,6 +241,7 @@ build {
       "net localgroup Administrators ${var.install_user} /add",
       "net user ${var.runneradmin_user} ${var.install_password} /add /passwordchg:no /passwordreq:yes /active:yes /Y",
       "net localgroup Administrators ${var.runneradmin_user} /add",
+      "wevtutil set-log Microsoft-Windows-TaskScheduler/Operational /enabled:true​",
       "winrm set winrm/config/service/auth @{Basic=\"true\"}",
       "winrm get winrm/config/service/auth"
     ]
