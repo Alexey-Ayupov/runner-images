@@ -276,7 +276,7 @@ provisioner "powershell" {
 
   provisioner "powershell" {
     elevated_password = "${var.install_password}"
-    elevated_user     = "${var.runneradmin_user}"
+    elevated_user     = "${var.install_user}"
     inline            = [
       "$RegistryPath = 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon'",
       "Set-ItemProperty $RegistryPath 'AutoAdminLogon' -Value '1' -Type String",
