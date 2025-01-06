@@ -241,7 +241,6 @@ build {
       "net localgroup Administrators ${var.install_user} /add",
       "net user ${var.runneradmin_user} ${var.install_password} /add /passwordchg:no /passwordreq:yes /active:yes /Y",
       "net localgroup Administrators ${var.runneradmin_user} /add",
-      "wevtutil set-log Microsoft-Windows-TaskScheduler/Operational /enabled:true",
       "winrm set winrm/config/service/auth @{Basic=\"true\"}",
       "winrm get winrm/config/service/auth"
     ]
@@ -275,23 +274,13 @@ provisioner "powershell" {
     inline = ["Set-Service -Name wlansvc -StartupType Manual", "if ($(Get-Service -Name wlansvc).Status -eq 'Running') { Stop-Service -Name wlansvc}"]
   }
 
-  provisioner "powershell" {
-    inline            = [
-      "$RegistryPath = 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon'",
-      "Set-ItemProperty $RegistryPath 'AutoAdminLogon' -Value '1' -Type String",
-      "Set-ItemProperty $RegistryPath 'ForceAutoLogon' -Value '1' -Type String",
-      "Set-ItemProperty $RegistryPath 'DefaultUsername' -Value ${var.runneradmin_user} -type String",
-      "Set-ItemProperty $RegistryPath 'DefaultPassword' -Value ${var.install_password} -type String"
-    ]
-  }
-
   provisioner "windows-restart" {
     restart_timeout = "10m"
   }
 
   provisioner "powershell" {
     elevated_password = "${var.install_password}"
-    elevated_user     = "${var.install_user}"
+    elevated_user     = "${var.runneradmin_user}"
     environment_vars = ["RUNNERADMIN_USER=${var.runneradmin_user}", "INSTALL_PASSWORD=${var.install_password}", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts          = [
       "${path.root}/../scripts/build/Configure-runneradmin.ps1"
@@ -312,6 +301,17 @@ provisioner "powershell" {
     scripts           = [
       "${path.root}/../scripts/build/Configure-GDIProcessHandleQuota.ps1",
       "${path.root}/../scripts/build/Configure-DeveloperMode.ps1"
+    ]
+  }
+
+  provisioner "powershell" {
+    inline = [
+      "$Password = '1Qaz2wsx3edc'",
+      "$SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force",
+      "Write-Host 'Get ${var.runneradmin_user} user account'",
+      "$UserAccount = Get-LocalUser -Name ${var.runneradmin_user}",
+      "Write-Host 'Change password for ${var.runneradmin_user} user account'",
+      "$UserAccount | Set-LocalUser -Password $SecurePassword"
     ]
   }
 
