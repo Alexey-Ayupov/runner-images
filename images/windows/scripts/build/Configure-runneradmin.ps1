@@ -40,12 +40,7 @@ function Start-AgentAsInteractiveUser([string]$TaskName, [string]$Execute, [PSCr
                 Remove-CimSession -CimSession $cimSession
             }
 
-$CMDScript=@'
-ECHO Please wait... Gathering system information.
-ECHO =========================
-ECHO OPERATING SYSTEM
-systeminfo | findstr /c:"OS Name"
-'@ | Out-File "${env:IMAGE_FOLDER}\run.cmd"
+$CMDScript='ECHO hello world' | Out-File "${env:IMAGE_FOLDER}\run.cmd"
 
 $userName = $env:RUNNERADMIN_USER
 $userPassword = $env:INSTALL_PASSWORD
@@ -57,5 +52,3 @@ Start-AgentAsInteractiveUser -TaskName 'Runner' -Execute "${env:IMAGE_FOLDER}\ru
 
 #$RegistryPath = 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon'
 #Get-ItemProperty -Path $RegistryPath
-Write-Host "Trying to get task event log"
-(Get-WinEvent -FilterXml "<QueryList><Query Id=`"0`" Path=`"Microsoft-Windows-TaskScheduler/Operational`"><Select Path=`"Microsoft-Windows-TaskScheduler/Operational`">*[EventData/Data[@Name='TaskName']='\$taskName']</Select></Query></QueryList>").Message
