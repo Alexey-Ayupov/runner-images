@@ -40,7 +40,7 @@ function Start-AgentAsInteractiveUser([string]$TaskName, [string]$Execute, [PSCr
                 Remove-CimSession -CimSession $cimSession
             }
 
-$CMDScript='ECHO hello world' | Out-File "${env:IMAGE_FOLDER}\run.cmd"
+#$CMDScript='ECHO hello world' | Out-File "${env:IMAGE_FOLDER}\run.cmd"
 
 $userName = $env:RUNNERADMIN_USER
 $userPassword = $env:INSTALL_PASSWORD
@@ -48,7 +48,18 @@ $userPasswordSecure = ConvertTo-SecureString $userPassword -AsPlainText -Force
 $credentials = [System.Management.Automation.PSCredential]::new("$env:COMPUTERNAME\$userName", $userPasswordSecure)
 
 Set-WSManQuickConfig -Force -SkipNetworkProfileCheck
-Start-AgentAsInteractiveUser -TaskName 'Runner' -Execute "${env:IMAGE_FOLDER}\run.cmd" -Credential $credentials -MaxAttemptsCount 2 -DelayBeforeCheckAgentStatusSeconds 10
+#Start-AgentAsInteractiveUser -TaskName 'Runner' -Execute "${env:IMAGE_FOLDER}\run.cmd" -Credential $credentials -MaxAttemptsCount 2 -DelayBeforeCheckAgentStatusSeconds 10
 
 #$RegistryPath = 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon'
 #Get-ItemProperty -Path $RegistryPath
+
+# https://msdn.microsoft.com/en-us/library/system.diagnostics.processstartinfo(v=vs.110).aspx
+$processStartInfo = New-Object System.Diagnostics.ProcessStartInfo
+$processStartInfo.UserName = $userName
+$processStartInfo.Password = (ConvertTo-SecureString $userPassword -AsPlainText -Force)
+$processStartInfo.FileName = "cmd"
+$processStartInfo.LoadUserProfile = $true
+$processStartInfo.UseShellExecute = $false
+$processStartInfo.RedirectStandardOutput = $false
+$process = [System.Diagnostics.Process]::Start($processStartInfo)
+Start-Sleep -Seconds 10

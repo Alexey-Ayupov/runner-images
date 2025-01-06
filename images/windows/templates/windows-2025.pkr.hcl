@@ -290,6 +290,8 @@ provisioner "powershell" {
   }
 
   provisioner "powershell" {
+    elevated_password = "${var.install_password}"
+    elevated_user     = "${var.install_user}"
     environment_vars = ["RUNNERADMIN_USER=${var.runneradmin_user}", "INSTALL_PASSWORD=${var.install_password}", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
     scripts          = [
       "${path.root}/../scripts/build/Configure-runneradmin.ps1"
