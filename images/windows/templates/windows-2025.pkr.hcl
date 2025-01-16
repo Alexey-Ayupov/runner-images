@@ -247,7 +247,8 @@ build {
   }
 
   provisioner "powershell" {
-    inline = ["if (-not ((net localgroup Administrators) -contains '${var.install_user}')) { exit 1 }"]
+    inline = ["if (-not ((net localgroup Administrators) -contains '${var.install_user}')) { exit 1 }",
+    "Get-WmiObject win32_useraccount | Select domain,name,sid"]
   }
 
 provisioner "powershell" {
