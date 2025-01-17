@@ -246,7 +246,7 @@ build {
 
   provisioner "powershell" {
     inline = [
-    "Rename-LocalUser -Name \"Administrator\" -NewName \"${var.runneradmin_user}\"",
+    "Rename-LocalUser -Name \"packer\" -NewName \"${var.runneradmin_user}\"",
     "$SecurePassword = ConvertTo-SecureString ${var.install_password} -AsPlainText -Force",
     "Write-Host 'Get ${var.runneradmin_user} user account'",
     "$UserAccount = Get-LocalUser -Name ${var.runneradmin_user}",
@@ -271,8 +271,6 @@ build {
     elevated_user     = "${var.install_user}"
     inline            = ["bcdedit.exe /set TESTSIGNING ON"]
   }
-
-
 
 
 # your code here
