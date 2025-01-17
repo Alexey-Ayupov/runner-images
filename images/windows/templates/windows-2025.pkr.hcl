@@ -246,14 +246,16 @@ build {
 
   provisioner "powershell" {
     inline = [
-    "Rename-LocalUser -Name \"packer\" -NewName \"${var.runneradmin_user}\"",
-    "$SecurePassword = ConvertTo-SecureString ${var.install_password} -AsPlainText -Force",
-    "Write-Host 'Get ${var.runneradmin_user} user account'",
-    "$UserAccount = Get-LocalUser -Name ${var.runneradmin_user}",
-    "Write-Host 'Change password for ${var.runneradmin_user} user account'",
-    "$UserAccount | Set-LocalUser -Password $SecurePassword",
-    "$RegistryPath = 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon'",
-    "Set-ItemProperty $RegistryPath 'DefaultPassword' -Value '${var.install_password}'"
+      "Rename-LocalUser -Name \"packer\" -NewName \"${var.runneradmin_user}\"",
+      "$SecurePassword = ConvertTo-SecureString ${var.install_password} -AsPlainText -Force",
+      "Write-Host 'Get ${var.runneradmin_user} user account'",
+      "$UserAccount = Get-LocalUser -Name ${var.runneradmin_user}",
+      "Write-Host 'Change password for ${var.runneradmin_user} user account'",
+      "$UserAccount | Set-LocalUser -Password $SecurePassword",
+      "$RegistryPath = 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon'",
+      "Set-ItemProperty $RegistryPath 'DefaultPassword' -Value '${var.install_password}'",
+      "net user packer ${var.install_password} /add /passwordchg:no /passwordreq:yes /active:yes /Y",
+      "net localgroup Administrators packer /add"
     ]
   }
 
