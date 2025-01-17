@@ -239,82 +239,41 @@ build {
     inline = [
       "net user ${var.install_user} ${var.install_password} /add /passwordchg:no /passwordreq:yes /active:yes /Y",
       "net localgroup Administrators ${var.install_user} /add",
-      "net user ${var.runneradmin_user} ${var.install_password} /add /passwordchg:no /passwordreq:yes /active:yes /Y",
-      "net localgroup Administrators ${var.runneradmin_user} /add",
       "winrm set winrm/config/service/auth @{Basic=\"true\"}",
       "winrm get winrm/config/service/auth"
     ]
   }
 
   provisioner "powershell" {
-    inline = ["if (-not ((net localgroup Administrators) -contains '${var.install_user}')) { exit 1 }",
-    "Get-WmiObject win32_useraccount | Select domain,name,sid"]
-  }
-
-provisioner "powershell" {
-    elevated_password = "${var.install_password}"
-    elevated_user     = "${var.install_user}"
-    inline            = ["bcdedit.exe /set TESTSIGNING ON"]
-  }
-
-  provisioner "powershell" {
-    environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_OS=${var.image_os}", "AGENT_TOOLSDIRECTORY=${var.agent_tools_directory}", "IMAGEDATA_FILE=${var.imagedata_file}", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
-    execution_policy = "unrestricted"
-    scripts          = [
-      "${path.root}/../scripts/build/Configure-WindowsDefender.ps1",
-      "${path.root}/../scripts/build/Configure-PowerShell.ps1",
-      "${path.root}/../scripts/build/Install-PowerShellModules.ps1",
-      "${path.root}/../scripts/build/Configure-BaseImage.ps1",
-      "${path.root}/../scripts/build/Configure-ImageDataFile.ps1",
-      "${path.root}/../scripts/build/Configure-SystemEnvironment.ps1",
-      "${path.root}/../scripts/build/Configure-DotnetSecureChannel.ps1"
-    ]
-  }
-
-  provisioner "powershell" {
-    inline = ["Set-Service -Name wlansvc -StartupType Manual", "if ($(Get-Service -Name wlansvc).Status -eq 'Running') { Stop-Service -Name wlansvc}"]
-  }
-
-  provisioner "windows-restart" {
-    restart_timeout = "10m"
-  }
-
-  provisioner "powershell" {
-    elevated_password = "${var.install_password}"
-    elevated_user     = "${var.runneradmin_user}"
-    environment_vars = ["RUNNERADMIN_USER=${var.runneradmin_user}", "INSTALL_PASSWORD=${var.install_password}", "IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
-    scripts          = [
-      "${path.root}/../scripts/build/Configure-runneradmin.ps1"
-    ]
-  }
-
-  provisioner "powershell" {
-    environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
-    scripts          = [
-      "${path.root}/../scripts/build/Configure-Diagnostics.ps1"
-    ]
-  }
-
-  provisioner "powershell" {
-    elevated_password = "${var.install_password}"
-    elevated_user     = "${var.install_user}"
-    environment_vars  = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
-    scripts           = [
-      "${path.root}/../scripts/build/Configure-GDIProcessHandleQuota.ps1",
-      "${path.root}/../scripts/build/Configure-DeveloperMode.ps1"
+    inline = [
+    "Rename-LocalUser -Name \"Administrator\" -NewName \"${var.runneradmin_user}\"",
+    "$SecurePassword = ConvertTo-SecureString ${var.install_password} -AsPlainText -Force",
+    "Write-Host 'Get ${var.runneradmin_user} user account'",
+    "$UserAccount = Get-LocalUser -Name ${var.runneradmin_user}",
+    "Write-Host 'Change password for ${var.runneradmin_user} user account'",
+    "$UserAccount | Set-LocalUser -Password $SecurePassword",
+    "$RegistryPath = 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon'",
+    "Set-ItemProperty $RegistryPath 'DefaultPassword' -Value '${var.install_password}'"
     ]
   }
 
   provisioner "powershell" {
     inline = [
-      "$Password = '1Qaz2wsx3edc'",
-      "$SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force",
-      "Write-Host 'Get ${var.runneradmin_user} user account'",
-      "$UserAccount = Get-LocalUser -Name ${var.runneradmin_user}",
-      "Write-Host 'Change password for ${var.runneradmin_user} user account'",
-      "$UserAccount | Set-LocalUser -Password $SecurePassword"
+    "if (-not ((net localgroup Administrators) -contains '${var.install_user}')) { exit 1 }",
+    "write-host 'get all users and sisd'",
+    "$allusersandsids = Get-WmiObject win32_useraccount | Select domain,name,sid",
+    "write-host $allusersandsids"
     ]
   }
+
+  provisioner "powershell" {
+    elevated_password = "${var.install_password}"
+    elevated_user     = "${var.install_user}"
+    inline            = ["bcdedit.exe /set TESTSIGNING ON"]
+  }
+
+
+
 
 # your code here
 
@@ -334,14 +293,6 @@ provisioner "powershell" {
     source      = "C:\\software-report.json"
   }
 
-  provisioner "powershell" {
-    environment_vars = ["INSTALL_USER=${var.install_user}"]
-    scripts          = [
-      "${path.root}/../scripts/build/Configure-System.ps1",
-      "${path.root}/../scripts/build/Configure-User.ps1"
-    ]
-    skip_clean       = true
-  }
 
   provisioner "windows-restart" {
     restart_timeout = "10m"
