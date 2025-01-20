@@ -102,3 +102,11 @@ Add-Content -Path "C:\work\runner-images\images\windows\scripts\docs-gen\Generat
 #>
 
 ## https://github.com/orgs/community/discussions/25950
+
+$url = "https://api.github.com/repos/actions/runner-images/pulls/11389.diff"
+
+$headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
+$headers.Add("Accept", "application/vnd.github.v3.diff")
+
+
+$response =  Invoke-RestMethod -Uri $url -Headers $headers -Method Get
