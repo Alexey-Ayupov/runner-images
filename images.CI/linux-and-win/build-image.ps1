@@ -54,8 +54,8 @@ packer build    -var "client_id=$ClientId" `
                 -var "install_password=$InstallPassword" `
                 -var "subscription_id=$SubscriptionId" `
                 -var "tenant_id=$TenantId" `
-                -var "oidc_request_token"=$oidcRequestToken `
-                -var "oidc_request_token"=$oidcRequestUrl `
+                -var "oidc_request_token=$oidcRequestToken" `
+                -var "oidc_request_token=$oidcRequestUrl" `
                 -color=false `
                 $TemplatePath `
         | Where-Object {
