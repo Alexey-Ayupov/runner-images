@@ -1,18 +1,21 @@
 param(
     [String] [Parameter (Mandatory=$true)] $TemplatePath,
+    [String] [Parameter (Mandatory=$true)] $pluginVersion,
     [String] [Parameter (Mandatory=$true)] $ClientId,
-    [String] [Parameter (Mandatory=$true)] $ClientSecret,
-    [String] [Parameter (Mandatory=$true)] $Location,
-    [String] [Parameter (Mandatory=$true)] $ImageName,
-    [String] [Parameter (Mandatory=$true)] $ImageResourceGroupName,
-    [String] [Parameter (Mandatory=$true)] $TempResourceGroupName,
+    [String] [Parameter (Mandatory=$false)] $ClientSecret = "",
+    [String] [Parameter (Mandatory=$false)] $oidcRequestToken = "",
+    [String] [Parameter (Mandatory=$false)] $oidcRequestUrl = "",
+    [String] [Parameter (Mandatory=$false)] $Location,
+    [String] [Parameter (Mandatory=$false)] $ImageName,
+    [String] [Parameter (Mandatory=$false)] $ImageResourceGroupName,
+    [String] [Parameter (Mandatory=$false)] $TempResourceGroupName,
     [String] [Parameter (Mandatory=$true)] $SubscriptionId,
     [String] [Parameter (Mandatory=$true)] $TenantId,
     [String] [Parameter (Mandatory=$false)] $VirtualNetworkName,
     [String] [Parameter (Mandatory=$false)] $VirtualNetworkRG,
     [String] [Parameter (Mandatory=$false)] $VirtualNetworkSubnet,
     [String] [Parameter (Mandatory=$false)] $AllowedInboundIpAddresses = "[]",
-    [hashtable] [Parameter (Mandatory=$False)] $Tags = @{}
+    [hashtable] [Parameter (Mandatory=$false)] $Tags = @{}
 )
 
 if (-not (Test-Path $TemplatePath))
@@ -21,7 +24,7 @@ if (-not (Test-Path $TemplatePath))
     exit 1
 }
 
-$ImageTemplateName = [io.path]::GetFileName($TemplatePath).Split(".")[0]
+$ImageTemplateName = $TemplatePath.Split("/")[-1]
 $InstallPassword = [System.GUID]::NewGuid().ToString().ToUpper()
 
 $SensitiveData = @(
@@ -40,7 +43,7 @@ Write-Host "Show Packer Version"
 packer --version
 
 Write-Host "Download packer plugins"
-packer init $TemplatePath
+packer plugins install github.com/hashicorp/azure $pluginVersion
 
 Write-Host "Validate packer template"
 packer validate -syntax-only $TemplatePath
@@ -49,17 +52,10 @@ Write-Host "Build $ImageTemplateName VM"
 packer build    -var "client_id=$ClientId" `
                 -var "client_secret=$ClientSecret" `
                 -var "install_password=$InstallPassword" `
-                -var "location=$Location" `
-                -var "managed_image_name=$ImageName" `
-                -var "managed_image_resource_group_name=$ImageResourceGroupName" `
                 -var "subscription_id=$SubscriptionId" `
-                -var "temp_resource_group_name=$TempResourceGroupName" `
                 -var "tenant_id=$TenantId" `
-                -var "virtual_network_name=$VirtualNetworkName" `
-                -var "virtual_network_resource_group_name=$VirtualNetworkRG" `
-                -var "virtual_network_subnet_name=$VirtualNetworkSubnet" `
-                -var "allowed_inbound_ip_addresses=$($AllowedInboundIpAddresses)" `
-                -var "azure_tags={$azure_tags}" `
+                -var "oidc_request_token"=$oidcRequestToken `
+                -var "oidc_request_token"=$oidcRequestUrl `
                 -color=false `
                 $TemplatePath `
         | Where-Object {
