@@ -1,5 +1,6 @@
 locals {
   managed_image_name = var.managed_image_name != "" ? var.managed_image_name : "packer-${var.image_os}-${var.image_version}"
+  user_data_file = var.user_data_file == "true" ? "${path.root}/userdata.ps1" : ""
 }
 
 source "azure-arm" "image" {
@@ -30,7 +31,7 @@ source "azure-arm" "image" {
   winrm_use_ssl                          = "true"
   winrm_username                         = "packer"
   custom_script                          = "${var.custom_script}"
-  user_data_file                         = "${var.user_data_file}"
+  user_data_file                         = "${local.user_data_file}"
   skip_create_build_key_vault            = "${var.skip_create_build_key_vault}"
   oidc_request_token                     = "${var.oidc_request_token}"
   oidc_request_url                       = "${var.oidc_request_url}"
