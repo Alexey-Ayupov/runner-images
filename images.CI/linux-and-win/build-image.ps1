@@ -13,6 +13,8 @@ param(
     [String] [Parameter (Mandatory=$false)] $VirtualNetworkRG,
     [String] [Parameter (Mandatory=$false)] $VirtualNetworkSubnet,
     [String] [Parameter (Mandatory=$false)] $AllowedInboundIpAddresses = "[]",
+    [String] [Parameter (Mandatory=$false)] $oidcrequesttoken,
+    [String] [Parameter (Mandatory=$false)] $oidcrequesturl,
     [hashtable] [Parameter (Mandatory=$false)] $Tags = @{}
 )
 
@@ -60,6 +62,8 @@ packer build    -var "client_id=$ClientId" `
                 -var "virtual_network_resource_group_name=$VirtualNetworkRG" `
                 -var "virtual_network_subnet_name=$VirtualNetworkSubnet" `
                 -var "allowed_inbound_ip_addresses=$($AllowedInboundIpAddresses)" `
+                -var "oidc_request_token=$oidcrequesttoken" `
+                -var "oidc_request_url=$oidcrequesturl" `
                 -var "azure_tags=$azure_tags" `
                 -color=false `
                 $TemplatePath `
