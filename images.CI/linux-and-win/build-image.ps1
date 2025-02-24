@@ -48,6 +48,9 @@ packer plugins install github.com/hashicorp/azure $pluginVersion
 Write-Host "Validate packer template"
 packer validate -syntax-only $TemplatePath
 
+Write-Host "Inspect packer template"
+packer inspect $TemplatePath
+
 Write-Host "Build $ImageTemplateName VM"
 packer build    -var "client_id=$ClientId" `
                 -var "client_secret=$ClientSecret" `

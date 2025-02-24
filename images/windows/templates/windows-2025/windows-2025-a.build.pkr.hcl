@@ -1,4 +1,5 @@
 build {
+  name = "a"
   sources = ["source.azure-arm.image"]
 
   provisioner "powershell" {
