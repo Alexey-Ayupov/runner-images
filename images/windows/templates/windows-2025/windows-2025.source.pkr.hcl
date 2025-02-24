@@ -31,7 +31,7 @@ source "azure-arm" "image" {
   winrm_use_ssl                          = "true"
   winrm_username                         = "packer"
   custom_script                          = "powershell -ExecutionPolicy Unrestricted -NoProfile -NonInteractive -Command \"$userData = (Invoke-RestMethod -H @{'Metadata'='True'} -Method GET -Uri 'http://169.254.169.254/metadata/instance/compute/userData?api-version=2021-01-01&format=text'); $contents = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($userData)); set-content -path c:\\Windows\\Temp\\userdata.ps1 -value $contents; . c:\\Windows\\Temp\\userdata.ps1;\""
-  user_data_file                         = "./userdata.ps1"
+  user_data_file                         = "${path.root}/userdata.ps1"
   skip_create_build_key_vault            = true
   oidc_request_token                     = "${var.oidc_request_token}"
   oidc_request_url                       = "${var.oidc_request_url}"
