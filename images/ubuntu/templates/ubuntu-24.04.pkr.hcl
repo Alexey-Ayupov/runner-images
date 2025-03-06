@@ -60,7 +60,7 @@ variable "image_os" {
 
 variable "image_version" {
   type    = string
-  default = "1.0.1"
+  default = "1.0.2"
 }
 
 variable "imagedata_file" {
@@ -131,12 +131,12 @@ variable "virtual_network_subnet_name" {
 
 variable "vm_size" {
   type    = string
-  default = "Standard_D2ps_v5"
+  default = "Standard_D2s_v3"
 }
 
 variable "gallery_image_name" {
   type    = string
-  default = "ubn-22-arm"
+  default = "nvidia"
 }
 
 source "azure-arm" "build_image" {
@@ -146,9 +146,9 @@ source "azure-arm" "build_image" {
   client_id                              = "${var.client_id}"
   client_secret                          = "${var.client_secret}"
   location                               = "${var.location}"
-  image_offer                            = "0001-com-ubuntu-server-jammy"
-  image_publisher                        = "canonical"
-  image_sku                              = "22_04-lts-arm64"
+  image_offer                            = "ngc_azure_17_11"
+  image_publisher                        = "nvidia"
+  image_sku                              = "gpu_optimized_24_10_1_gen2"
   os_type                                = "Linux"
   private_virtual_network_with_public_ip = "${var.private_virtual_network_with_public_ip}"
   subscription_id                        = "${var.subscription_id}"
@@ -166,6 +166,12 @@ source "azure-arm" "build_image" {
     image_name                           = var.gallery_image_name
     image_version                        = var.image_version
     storage_account_type                 = "Premium_LRS"
+  }
+
+  plan_info {
+    plan_name				                     = "gpu_optimized_24_10_1_gen2"
+    plan_publisher                       = "nvidia"
+    plan_product                         = "ngc_azure_17_11"
   }
 
   dynamic "azure_tag" {
