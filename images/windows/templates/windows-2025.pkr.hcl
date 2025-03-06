@@ -50,7 +50,7 @@ variable "image_folder" {
 
 variable "image_os" {
   type    = string
-  default = "win11-23h2-ent"
+  default = "win11"
 }
 
 variable "image_version" {
@@ -146,7 +146,7 @@ variable "vm_size" {
 
 variable "gallery_image_name" {
   type    = string
-  default = "win11-env-arm64"
+  default = "test"
 }
 
 source "azure-arm" "image" {
@@ -160,9 +160,6 @@ source "azure-arm" "image" {
   image_publisher                        = "MicrosoftWindowsDesktop"
   image_sku                              = "win11-23h2-ent"
   location                               = "${var.location}"
-  managed_image_name                     = "${local.managed_image_name}"
-  managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
-  managed_image_storage_account_type     = "${var.managed_image_storage_account_type}"
   object_id                              = "${var.object_id}"
   os_type                                = "Windows"
   private_virtual_network_with_public_ip = "${var.private_virtual_network_with_public_ip}"
