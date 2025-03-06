@@ -136,7 +136,7 @@ variable "vm_size" {
 
 variable "gallery_image_name" {
   type    = string
-  default = "nvidia"
+  default = "nvidia2"
 }
 
 source "azure-arm" "build_image" {
