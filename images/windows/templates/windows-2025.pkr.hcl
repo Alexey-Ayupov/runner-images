@@ -141,12 +141,12 @@ variable "virtual_network_subnet_name" {
 
 variable "vm_size" {
   type    = string
-  default = "Standard_D2ds_v5"
+  default = "Standard_D2ps_v5"
 }
 
 variable "gallery_image_name" {
   type    = string
-  default = "win11-23h2-ent"
+  default = "win11-env-arm64"
 }
 
 source "azure-arm" "image" {
@@ -156,7 +156,7 @@ source "azure-arm" "image" {
   client_id                              = "${var.client_id}"
   client_secret                          = "${var.client_secret}"
   communicator                           = "winrm"
-  image_offer                            = "windows-11"
+  image_offer                            = "windows11preview-arm64"
   image_publisher                        = "MicrosoftWindowsDesktop"
   image_sku                              = "win11-23h2-ent"
   location                               = "${var.location}"
