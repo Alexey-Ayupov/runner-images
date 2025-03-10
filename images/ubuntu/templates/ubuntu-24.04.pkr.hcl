@@ -58,10 +58,6 @@ variable "image_os" {
   default = "ubuntu24"
 }
 
-variable "image_version" {
-  type    = string
-  default = "1.0.2"
-}
 
 variable "imagedata_file" {
   type    = string
@@ -137,6 +133,11 @@ variable "vm_size" {
 variable "gallery_image_name" {
   type    = string
   default = "ubn-22-arm"
+}
+
+variable "image_version" {
+  type    = string
+  default = "1.0.3"
 }
 
 source "azure-arm" "build_image" {
