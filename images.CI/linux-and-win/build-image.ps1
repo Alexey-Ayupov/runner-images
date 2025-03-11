@@ -38,6 +38,8 @@ $SensitiveData = @(
 
 $azure_tags = $Tags | ConvertTo-Json -Compress
 
+Write-Host $additionalScripts
+
 if (! [string]::IsNullOrEmpty($additionalScripts) ) {
     $updatedScripts = @()
     foreach ($script in $additionalScripts) {
@@ -48,6 +50,7 @@ if (! [string]::IsNullOrEmpty($additionalScripts) ) {
     $updatedScripts = "[]"
 }
 
+Write-Host $updatedScripts
 
 Write-Host "Show Packer Version"
 packer --version
@@ -57,6 +60,8 @@ packer plugins install github.com/hashicorp/azure $pluginVersion
 
 Write-Host "Validate packer template"
 packer validate -syntax-only $TemplatePath
+
+packer inspect $TemplatePath
 
 Write-Host "Build $ImageTemplateName VM"
 packer build    -var "client_id=$ClientId" `
