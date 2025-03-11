@@ -1,5 +1,5 @@
-param location string
-param delegatedSubnetNSGName string
+param location string = 'eastus'
+param delegatedSubnetNSGName string = 'gh-delegated-subnet-nsg'
 
 resource delegatedSubnetNSG 'Microsoft.Network/networkSecurityGroups@2017-06-01' = {
     name: delegatedSubnetNSGName

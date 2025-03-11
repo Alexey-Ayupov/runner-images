@@ -38,7 +38,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
                 serviceEndpoints: []
                 delegations: [
                   {
-                      name: 'itHub.Network/networkSettings'
+                      name: 'GitHub.Network/networkSettings'
                       properties: {
                           serviceName: 'GitHub.Network/networkSettings'
                       }

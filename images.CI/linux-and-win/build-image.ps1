@@ -13,7 +13,8 @@ param(
     [String] [Parameter (Mandatory=$false)] $VirtualNetworkRG,
     [String] [Parameter (Mandatory=$false)] $VirtualNetworkSubnet,
     [String] [Parameter (Mandatory=$false)] $AllowedInboundIpAddresses = "[]",
-    [hashtable] [Parameter (Mandatory=$false)] $Tags = @{}
+    [hashtable] [Parameter (Mandatory=$false)] $Tags = @{},
+    [array] [Parameter (Mandatory=$false)] $additionalScripts = @()
 )
 
 if (-not (Test-Path $TemplatePath))
@@ -36,6 +37,17 @@ $SensitiveData = @(
 )
 
 $azure_tags = $Tags | ConvertTo-Json -Compress
+
+if (! [string]::IsNullOrEmpty($additionalScripts) ) {
+    $updatedScripts = @()
+    foreach ($script in $additionalScripts) {
+        $updatedScripts += '{0}/{1}'  -f "`${path.root}/../scripts/build", $script
+    }
+    $updatedScripts = $updatedScripts | ConvertTo-Json -AsArray -Compress
+} else {
+    $updatedScripts = "[]"
+}
+
 
 Write-Host "Show Packer Version"
 packer --version
@@ -61,6 +73,7 @@ packer build    -var "client_id=$ClientId" `
                 -var "virtual_network_subnet_name=$VirtualNetworkSubnet" `
                 -var "allowed_inbound_ip_addresses=$($AllowedInboundIpAddresses)" `
                 -var "azure_tags=$azure_tags" `
+                -var "additional_scripts=$updatedScripts" `
                 -color=false `
                 $TemplatePath `
         | Where-Object {

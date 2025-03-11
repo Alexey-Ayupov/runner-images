@@ -140,6 +140,11 @@ variable "image_version" {
   default = "1.0.3"
 }
 
+variable "additional_scripts" {
+  type        = list(string)
+  default     = []
+}
+
 source "azure-arm" "build_image" {
   allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
   build_resource_group_name              = "${var.build_resource_group_name}"
@@ -147,9 +152,9 @@ source "azure-arm" "build_image" {
   client_id                              = "${var.client_id}"
   client_secret                          = "${var.client_secret}"
   location                               = "${var.location}"
-  image_offer                            = "github_arm_linux_runner"
-  image_publisher                        = "arm"
-  image_sku                              = "github_arm_linux_runner_plan"
+  image_offer                            = "0001-com-ubuntu-server-jammy"
+  image_publisher                        = "canonical"
+  image_sku                              = "22_04-lts-arm64"
   os_type                                = "Linux"
   private_virtual_network_with_public_ip = "${var.private_virtual_network_with_public_ip}"
   subscription_id                        = "${var.subscription_id}"
@@ -190,6 +195,31 @@ build {
   provisioner "shell" {
     execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
     inline          = ["mkdir ${var.image_folder}", "chmod 777 ${var.image_folder}"]
+  }
+
+  provisioner "file" {
+    destination = "${var.helper_script_folder}"
+    source      = "${path.root}/../scripts/helpers"
+  }
+
+  provisioner "shell" {
+    execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+    script          = "${path.root}/../scripts/build/configure-apt-mock.sh"
+  }
+
+  provisioner "shell" {
+    environment_vars = ["HELPER_SCRIPTS=${var.helper_script_folder}","DEBIAN_FRONTEND=noninteractive"]
+    execute_command  = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+    scripts          = [
+      "${path.root}/../scripts/build/install-ms-repos.sh",
+      "${path.root}/../scripts/build/configure-apt-sources.sh",
+      "${path.root}/../scripts/build/configure-apt.sh"
+    ]
+  }
+
+  provisioner "shell" {
+    execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+    script          = var.additional_scripts
   }
 
   provisioner "shell" {
