@@ -215,7 +215,7 @@ build {
 
   provisioner "shell" {
     execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
-    script          = var.additional_scripts
+    script          = "${var.additional_scripts}"
   }
 
   provisioner "shell" {
