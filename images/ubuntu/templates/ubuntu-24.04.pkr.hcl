@@ -142,7 +142,10 @@ variable "image_version" {
 
 variable "additional_scripts" {
   type        = list(string)
-  default     = ["${path.root}/../scripts/build/install-azcopy.sh","${path.root}/../scripts/build/install-bicep.sh"]
+  default     = [
+    "images/ubuntu/scripts/build/install-azcopy.sh",
+    "images/ubuntu/scripts/build/install-bicep.sh"
+    ]
 }
 
 source "azure-arm" "build_image" {
