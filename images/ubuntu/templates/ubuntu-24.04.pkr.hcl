@@ -219,7 +219,7 @@ build {
 
   provisioner "shell" {
     execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
-    scripts          = "${local.additional_scripts}"
+    scripts          = "${var.additional_scripts}"
   }
 
   provisioner "shell" {
