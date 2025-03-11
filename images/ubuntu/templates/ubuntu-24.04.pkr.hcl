@@ -148,6 +148,10 @@ variable "additional_scripts" {
     ]
 }
 
+//locals {
+//  scripts = [for s in var.additional_scripts :format("${path.root}/../", s)]
+//}
+
 source "azure-arm" "build_image" {
   allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
   build_resource_group_name              = "${var.build_resource_group_name}"
@@ -218,7 +222,7 @@ build {
 
   provisioner "shell" {
     execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
-    script          = "${var.additional_scripts}"
+    scripts          = "${local.additional_scripts}"
   }
 
   provisioner "shell" {
