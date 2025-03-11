@@ -78,7 +78,6 @@ packer build    -var "client_id=$ClientId" `
                 -var "virtual_network_subnet_name=$VirtualNetworkSubnet" `
                 -var "allowed_inbound_ip_addresses=$($AllowedInboundIpAddresses)" `
                 -var "azure_tags=$azure_tags" `
-                -var "additional_scripts=$updatedScripts" `
                 -color=false `
                 $TemplatePath `
         | Where-Object {
