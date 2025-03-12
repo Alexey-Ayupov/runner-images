@@ -147,12 +147,21 @@ variable "additional_scripts" {
 
 variable "test_scripts" {
   type        = list(string)
-  default     = ["scripts/build/install-azcopy.sh","scripts/build/install-bicep.sh"]
+  default     = ["scripts/build/install-azcopy.sh"]
 }
 
+//locals {
+//  test1 = var.test_scripts == "[]" ? "empty" : var.test_scripts
+//  test2 = var.test_scripts != "[]" ? "not empty" : "empty"
+//}
+
 locals {
-  scripts = [for s in var.test_scripts : "${path.root}/../${s}"]
+  //scripts = length(var.test_scripts) != 0 ? var.test_scripts : concat(var.test_scripts, ["${path.root}/../some/test/script"])
+  scripts = length(var.test_scripts) != 0 ? [for s in var.test_scripts : "${path.root}/../${s}"] : concat(var.test_scripts, ["${path.root}/../scripts/build/install-bicep.sh"])
 }
+
+
+//scripts = var.test_scripts != "[]" ? [for s in var.test_scripts : "${path.root}/../${s}"] : concat(local.default_scripts, ["${path.root}/../some/test/script"])
 
 //locals {
 //  region_amis = { for region in var.regions : region => "ami-12345678" }
@@ -278,11 +287,11 @@ build {
     scripts          = ["${path.root}/../scripts/build/configure-environment.sh"]
   }
 
-  provisioner "shell" {
-    environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_OS=${var.image_os}", "HELPER_SCRIPTS=${var.helper_script_folder}"]
-    execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
-    scripts          = "${var.additional_scripts}"
-  }
+//  provisioner "shell" {
+//    environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_OS=${var.image_os}", "HELPER_SCRIPTS=${var.helper_script_folder}"]
+//    execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+//    scripts          = "${var.additional_scripts}"
+//  }
 
   provisioner "shell" {
     environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_OS=${var.image_os}", "HELPER_SCRIPTS=${var.helper_script_folder}"]
