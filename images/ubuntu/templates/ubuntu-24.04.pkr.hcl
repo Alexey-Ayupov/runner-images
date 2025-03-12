@@ -142,7 +142,7 @@ variable "image_version" {
 
 variable "additional_scripts" {
   type        = list(string)
-  default     = ["images/ubuntu/scripts/build/install-azcopy.sh","images/ubuntu/scripts/build/install-bicep.sh"]
+  default     = ["../scripts/build/install-azcopy.sh","../scripts/build/install-bicep.sh"]
 }
 
 //locals {
