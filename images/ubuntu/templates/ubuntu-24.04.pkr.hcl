@@ -77,7 +77,7 @@ variable "install_password" {
 
 variable "location" {
   type    = string
-  default = "${env("ARM_RESOURCE_LOCATION")}"
+  default = "westuse2"
 }
 
 variable "managed_image_name" {
@@ -142,16 +142,24 @@ variable "image_version" {
 
 variable "additional_scripts" {
   type        = list(string)
-  default     = ["../scripts/build/install-azcopy.sh","../scripts/build/install-bicep.sh"]
+  default     = ["./images/ubuntu/scripts/build/install-azcopy.sh","./images/ubuntu/scripts/build/install-bicep.sh"]
+}
+
+variable "test_scripts" {
+  type        = list(string)
+  default     = ["scripts/build/install-azcopy.sh","scripts/build/install-bicep.sh"]
+}
+
+locals {
+  scripts = [for s in var.test_scripts : "$${path.root}/../${s}"]
 }
 
 //locals {
-//  scripts = [for s in var.additional_scripts :format("${path.root}/../", s)]
+//  region_amis = { for region in var.regions : region => "ami-12345678" }
 //}
 
 source "azure-arm" "build_image" {
   allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
-  build_resource_group_name              = "${var.build_resource_group_name}"
   client_cert_path                       = "${var.client_cert_path}"
   client_id                              = "${var.client_id}"
   client_secret                          = "${var.client_secret}"
@@ -220,6 +228,11 @@ build {
   provisioner "shell" {
     execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
     scripts          = "${var.additional_scripts}"
+  }
+
+  provisioner "shell" {
+    execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+    scripts          = "${local.scripts}"
   }
 
   provisioner "shell" {
