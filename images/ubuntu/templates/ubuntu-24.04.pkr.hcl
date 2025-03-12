@@ -151,7 +151,7 @@ variable "test_scripts" {
 }
 
 locals {
-  scripts = [for s in var.test_scripts : "$${path.root}/../${s}"]
+  scripts = [for s in var.test_scripts : "${path.root}/../${s}"]
 }
 
 //locals {
