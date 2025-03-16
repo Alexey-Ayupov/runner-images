@@ -51,7 +51,7 @@ if (! [string]::IsNullOrEmpty($additionalScripts) ) {
 }
 
 $buildRGName = "poc-imagegen-rg"
-$buildKVname = "poc-imagegen-kv"
+$buildKVname = "poc-imagegen-kv02"
 $buildKVSecretName = "poc-wingen-secret"
 
 Write-Host $updatedScripts
