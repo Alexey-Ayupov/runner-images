@@ -55,7 +55,7 @@ variable "image_os" {
 
 variable "image_version" {
   type    = string
-  default = "1.0.3"
+  default = "1.0.4"
 }
 
 variable "imagedata_file" {
