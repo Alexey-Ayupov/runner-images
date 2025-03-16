@@ -167,7 +167,6 @@ source "azure-arm" "image" {
   image_offer                            = "windows11preview-arm64"
   image_publisher                        = "MicrosoftWindowsDesktop"
   image_sku                              = "win11-23h2-ent"
-  location                               = "${var.location}"
   object_id                              = "${var.object_id}"
   os_type                                = "Windows"
   private_virtual_network_with_public_ip = "${var.private_virtual_network_with_public_ip}"
