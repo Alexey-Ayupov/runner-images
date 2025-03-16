@@ -114,10 +114,6 @@ variable "subscription_id" {
   default = "${env("ARM_SUBSCRIPTION_ID")}"
 }
 
-variable "temp_resource_group_name" {
-  type    = string
-  default = "${env("TEMP_RESOURCE_GROUP_NAME")}"
-}
 
 variable "tenant_id" {
   type    = string
@@ -176,7 +172,6 @@ source "azure-arm" "image" {
   os_type                                = "Windows"
   private_virtual_network_with_public_ip = "${var.private_virtual_network_with_public_ip}"
   subscription_id                        = "${var.subscription_id}"
-  temp_resource_group_name               = "${var.temp_resource_group_name}"
   tenant_id                              = "${var.tenant_id}"
   virtual_network_name                   = "${var.virtual_network_name}"
   virtual_network_resource_group_name    = "${var.virtual_network_resource_group_name}"
