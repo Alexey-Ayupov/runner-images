@@ -149,9 +149,21 @@ variable "gallery_image_name" {
   default = "test"
 }
 
+variable "build_key_vault_name" {
+  type    = string
+  default = "${env("BUILD_KEY_VAULT_NAME")}"
+}
+
+variable "build_key_vault_secret_name" {
+  type    = string
+  default = "${env("BUILD_KEY_VAULT_SECRET_NAME")}"
+}
+
 source "azure-arm" "image" {
   allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
   build_resource_group_name              = "${var.build_resource_group_name}"
+  build_key_vault_name                   = "${var.build_key_vault_name}"
+  build_key_vault_secret_name            = "${var.build_key_vault_secret_name}"
   client_cert_path                       = "${var.client_cert_path}"
   client_id                              = "${var.client_id}"
   client_secret                          = "${var.client_secret}"

@@ -50,6 +50,10 @@ if (! [string]::IsNullOrEmpty($additionalScripts) ) {
     $updatedScripts = "[]"
 }
 
+$buildRGName = "poc-imagegen-rg"
+$buildKVname = "poc-imagegen-kv"
+$buildKVSecretName = "poc-wingen-secret"
+
 Write-Host $updatedScripts
 
 Write-Host "Show Packer Version"
@@ -71,7 +75,10 @@ packer build    -var "client_id=$ClientId" `
                 -var "managed_image_name=$ImageName" `
                 -var "managed_image_resource_group_name=$ImageResourceGroupName" `
                 -var "subscription_id=$SubscriptionId" `
-                -var "temp_resource_group_name=$TempResourceGroupName" `
+                -var "temp_resource_group_name=''" `
+                -var "build_resource_group_name=$buildRGName" `
+                -var "build_key_vault_name=$buildKVname" `
+                -var "build_key_vault_secret_name=$buildKVSecretName" `
                 -var "tenant_id=$TenantId" `
                 -var "virtual_network_name=$VirtualNetworkName" `
                 -var "virtual_network_resource_group_name=$VirtualNetworkRG" `

@@ -150,6 +150,26 @@ variable "test_scripts" {
   default     = ["scripts/build/install-azcopy.sh"]
 }
 
+variable "os_disk_size_gb" {
+  type    = number
+  default = null
+}
+
+variable "os_type" {
+  type    = string
+  default = "Linux"
+}
+
+
+variable "plan_info" {
+  type        = map(string)
+  default     = {
+    plan_name     = "test1"
+    plan_publisher = "test2"
+    plan_product   = "test3"
+  }
+}
+
 //locals {
 //  test1 = var.test_scripts == "[]" ? "empty" : var.test_scripts
 //  test2 = var.test_scripts != "[]" ? "not empty" : "empty"
@@ -157,7 +177,7 @@ variable "test_scripts" {
 
 locals {
   //scripts = length(var.test_scripts) != 0 ? var.test_scripts : concat(var.test_scripts, ["${path.root}/../some/test/script"])
-  scripts = length(var.test_scripts) != 0 ? [for s in var.test_scripts : "${path.root}/../${s}"] : concat(var.test_scripts, ["${path.root}/../scripts/build/install-bicep.sh"])
+  scripts = length(var.test_scripts) != 0 ? [for s in var.test_scripts : "${path.root}/${lower(var.os_type)}/${s}"] : concat(var.test_scripts, ["${path.root}/../scripts/build/install-bicep.sh"])
 }
 
 
@@ -196,9 +216,9 @@ source "azure-arm" "build_image" {
   }
 
   plan_info {
-    plan_name				                     = ""
-    plan_publisher                       = ""
-    plan_product                         = ""
+    plan_name				                     = var.plan_info.plan_name
+    plan_publisher                       = var.plan_info.plan_publisher
+    plan_product                         = var.plan_info.plan_product
   }
 
   dynamic "azure_tag" {
