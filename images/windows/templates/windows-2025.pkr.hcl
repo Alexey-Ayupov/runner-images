@@ -155,9 +155,14 @@ variable "build_key_vault_secret_name" {
   default = "${env("BUILD_KEY_VAULT_SECRET_NAME")}"
 }
 
+variable "temp_resource_group_name" {
+  type    = string
+  default = "${env("TEMP_RESOURCE_GROUP_NAME")}"
+}
+
 source "azure-arm" "image" {
   allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
-  build_resource_group_name              = "${var.build_resource_group_name}"
+  location                               = "${var.location}"
   build_key_vault_name                   = "${var.build_key_vault_name}"
   build_key_vault_secret_name            = "${var.build_key_vault_secret_name}"
   client_cert_path                       = "${var.client_cert_path}"
@@ -169,6 +174,7 @@ source "azure-arm" "image" {
   image_sku                              = "win11-23h2-ent"
   object_id                              = "${var.object_id}"
   os_type                                = "Windows"
+  temp_resource_group_name               = "${var.temp_resource_group_name}"
   private_virtual_network_with_public_ip = "${var.private_virtual_network_with_public_ip}"
   subscription_id                        = "${var.subscription_id}"
   tenant_id                              = "${var.tenant_id}"
