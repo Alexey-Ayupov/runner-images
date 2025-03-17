@@ -179,6 +179,7 @@ source "azure-arm" "image" {
   winrm_insecure                         = "true"
   winrm_use_ssl                          = "true"
   winrm_username                         = "packer"
+  winrm_expiration_time                  = "20h"
 
   shared_image_gallery_destination {
     subscription                         = "43cae42b-b28a-4eec-b9b3-e7e0e3febb4e"
