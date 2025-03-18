@@ -55,7 +55,7 @@ variable "image_os" {
 
 variable "image_version" {
   type    = string
-  default = "1.0.8"
+  default = "1.0.9"
 }
 
 variable "imagedata_file" {
@@ -160,6 +160,11 @@ variable "temp_resource_group_name" {
   default = "${env("TEMP_RESOURCE_GROUP_NAME")}"
 }
 
+variable "winrm_expiration_time" {
+  type    = string
+  default = "20h"
+}
+
 source "azure-arm" "image" {
   allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
   location                               = "${var.location}"
@@ -185,7 +190,7 @@ source "azure-arm" "image" {
   winrm_insecure                         = "true"
   winrm_use_ssl                          = "true"
   winrm_username                         = "packer"
-  winrm_expiration_time                  = "20h"
+  winrm_expiration_time                  = "${var.winrm_expiration_time}"
 
   shared_image_gallery_destination {
     subscription                         = "43cae42b-b28a-4eec-b9b3-e7e0e3febb4e"
