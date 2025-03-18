@@ -2,10 +2,10 @@ param(
     [String] [Parameter (Mandatory=$true)] $TemplatePath,
     [String] [Parameter (Mandatory=$true)] $ClientId,
     [String] [Parameter (Mandatory=$false)] $ClientSecret,
-    [String] [Parameter (Mandatory=$true)] $Location,
+    [String] [Parameter (Mandatory=$false)] $Location,
     [String] [Parameter (Mandatory=$true)] $ImageName,
     [String] [Parameter (Mandatory=$true)] $ImageResourceGroupName,
-    [String] [Parameter (Mandatory=$true)] $TempResourceGroupName,
+    [String] [Parameter (Mandatory=$false)] $TempResourceGroupName,
     [String] [Parameter (Mandatory=$true)] $SubscriptionId,
     [String] [Parameter (Mandatory=$true)] $TenantId,
     [String] [Parameter (Mandatory=$false)] $pluginVersion = "2.2.1",
@@ -71,11 +71,10 @@ Write-Host "Build $ImageTemplateName VM"
 packer build    -var "client_id=$ClientId" `
                 -var "client_secret=$ClientSecret" `
                 -var "install_password=$InstallPassword" `
-                -var "location=$Location" `
                 -var "managed_image_name=$ImageName" `
                 -var "managed_image_resource_group_name=$ImageResourceGroupName" `
                 -var "subscription_id=$SubscriptionId" `
-                -var "temp_resource_group_name=$TempResourceGroupName" `
+                -var "build_resource_group_name =$buildRGName" `
                 -var "build_key_vault_name=$buildKVname" `
                 -var "build_key_vault_secret_name=$buildKVSecretName" `
                 -var "tenant_id=$TenantId" `
