@@ -19,7 +19,7 @@ variable "azure_tags" {
 
 variable "build_resource_group_name" {
   type    = string
-  default = "${env("BUILD_RESOURCE_GROUP_NAME")}"
+  default = "poc-imagegen-rg"
 }
 
 variable "client_cert_path" {
@@ -79,10 +79,6 @@ variable "install_user" {
   default = "installer"
 }
 
-variable "location" {
-  type    = string
-  default = "${env("ARM_RESOURCE_LOCATION")}"
-}
 
 variable "managed_image_name" {
   type    = string
@@ -165,9 +161,14 @@ variable "winrm_expiration_time" {
   default = "20h"
 }
 
+variable "source_image_version" {
+  type    = string
+  default = "latest"
+}
+
 source "azure-arm" "image" {
   allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
-  location                               = "${var.location}"
+  build_resource_group_name              = "${var.build_resource_group_name}"
   build_key_vault_name                   = "${var.build_key_vault_name}"
   build_key_vault_secret_name            = "${var.build_key_vault_secret_name}"
   client_cert_path                       = "${var.client_cert_path}"
@@ -177,6 +178,7 @@ source "azure-arm" "image" {
   image_offer                            = "windows11preview-arm64"
   image_publisher                        = "MicrosoftWindowsDesktop"
   image_sku                              = "win11-23h2-ent"
+  image_version                          = "${var.source_image_version}"
   object_id                              = "${var.object_id}"
   os_type                                = "Windows"
   temp_resource_group_name               = "${var.temp_resource_group_name}"
@@ -191,6 +193,7 @@ source "azure-arm" "image" {
   winrm_use_ssl                          = "true"
   winrm_username                         = "packer"
   winrm_expiration_time                  = "${var.winrm_expiration_time}"
+
 
   shared_image_gallery_destination {
     subscription                         = "43cae42b-b28a-4eec-b9b3-e7e0e3febb4e"
