@@ -166,6 +166,21 @@ variable "source_image_version" {
   default = "latest"
 }
 
+variable "additional_scripts" {
+  type        = list(string)
+  default     = ["setup-nvidia-drivers.sh", "setup-test.sh"]
+}
+
+variable "image_os_type" {
+  type    = string
+  default = "Windows"
+}
+
+locals {
+  stub_script                 = var.image_os_type == "Windows" ? "${path.root}/scripts/windows/StubScript.ps1" : "${path.root}/scripts/linux/stub-script.sh"
+  additional_scripts          = length(var.additional_scripts) != 0 ? [for s in var.additional_scripts : "${path.root}/scripts/${lower(var.image_os_type)}/${s}"] : concat(var.additional_scripts, [local.stub_script])
+}
+
 source "azure-arm" "image" {
   allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
   build_resource_group_name              = "${var.build_resource_group_name}"
@@ -220,6 +235,10 @@ build {
     inline = [
       "New-Item -Path ${var.image_folder} -ItemType Directory -Force"
     ]
+  }
+
+  provisioner "powershell" {
+    scripts          = local.additional_scripts
   }
 
   provisioner "powershell" {
