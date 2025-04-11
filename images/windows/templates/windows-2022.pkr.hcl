@@ -155,9 +155,6 @@ source "azure-arm" "image" {
   image_publisher                        = "MicrosoftWindowsServer"
   image_sku                              = "2022-Datacenter"
   location                               = "${var.location}"
-  managed_image_name                     = "${local.managed_image_name}"
-  managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
-  managed_image_storage_account_type     = "${var.managed_image_storage_account_type}"
   object_id                              = "${var.object_id}"
   os_disk_size_gb                        = "256"
   os_type                                = "Windows"
@@ -172,6 +169,16 @@ source "azure-arm" "image" {
   winrm_insecure                         = "true"
   winrm_use_ssl                          = "true"
   winrm_username                         = "packer"
+
+  shared_image_gallery_destination {
+    subscription                         = "${var.subscription_id}"
+    gallery_name                         = "testgallery"
+    resource_group                       = "poc-imagegen-rg"
+    image_name                           = "w22-spec"
+    image_version                        = "1.0.0"
+    storage_account_type                 = "Standard_LRS"
+    specialized                          = true
+  }
 
   dynamic "azure_tag" {
     for_each = var.azure_tags
