@@ -175,7 +175,7 @@ source "azure-arm" "image" {
     gallery_name                         = "testgallery"
     resource_group                       = "poc-imagegen-rg"
     image_name                           = "w22-spec"
-    image_version                        = "1.0.0"
+    image_version                        = "1.0.1"
     storage_account_type                 = "Standard_LRS"
     specialized                          = true
   }
