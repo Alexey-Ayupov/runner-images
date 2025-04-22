@@ -144,6 +144,11 @@ variable "vm_size" {
   default = "Standard_F8s_v2"
 }
 
+variable "computername" {
+  type    = string
+  default = "runner"
+}
+
 source "azure-arm" "image" {
   allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
   build_resource_group_name              = "${var.build_resource_group_name}"
@@ -197,6 +202,18 @@ build {
       "New-Item -Path ${var.image_folder} -ItemType Directory -Force",
       "New-Item -Path ${var.temp_dir} -ItemType Directory -Force"
     ]
+  }
+
+  provisioner "powershell" {
+    inline            = ["Rename-Computer -NewName '${var.computername}' -Force"]
+  }
+
+  provisioner "windows-restart" {
+    restart_timeout = "10m"
+  }
+
+  provisioner "powershell" {
+    inline            = ["get-computerinfo"]
   }
 
 }
