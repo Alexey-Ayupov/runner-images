@@ -261,9 +261,14 @@ build {
 
   provisioner "powershell" {
     inline = [
-      "write-host \"image_folder variable -${var.image_folder}\"",
+      "write-host ${var.image_folder}",
+      "write-host ${var.temp_dir}"
+    ]
+  }
+
+  provisioner "powershell" {
+    inline = [
       "New-Item -Path \"C:\\image\" -ItemType Directory -Force",
-      "write-host \"temp_dir variable -${var.temp_dir}\"",
       "New-Item -Path \"D:\\temp\" -ItemType Directory -Force"
     ]
   }
