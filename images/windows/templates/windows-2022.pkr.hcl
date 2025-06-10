@@ -520,15 +520,6 @@ build {
     skip_clean       = true
   }
 
-  provisioner "powershell" {
-    inline = [
-      "Set-Service RdAgent -StartupType Disabled -ErrorAction Continue",
-      "Set-Service WindowsAzureTelemetryService -StartupType Disabled -ErrorAction Continue",
-      "Set-Service WindowsAzureGuestAgent -StartupType Disabled -ErrorAction Continue",
-      "Remove-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\SysPrepExternal\\Generalize' -Name '*'"
-    ]
-  }
-
   provisioner "windows-restart" {
     restart_timeout = "10m"
   }
