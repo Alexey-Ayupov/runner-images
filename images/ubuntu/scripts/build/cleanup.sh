@@ -9,27 +9,33 @@ before=$(df / -Pm | awk 'NR==2{print $4}')
 
 # clears out the local repository of retrieved package files
 # It removes everything but the lock file from /var/cache/apt/archives/ and /var/cache/apt/archives/partial
+echo "Cleaning up apt cache"
 apt-get clean
 rm -rf /tmp/*
 rm -rf /root/.cache
 
 # journalctl
+echo "Cleaning up journalctl logs"
 if command -v journalctl; then
     journalctl --rotate
     journalctl --vacuum-time=1s
 fi
 
 # delete all .gz and rotated file
+echo "Cleaning up log files .gz and rotated files"
 find /var/log -type f -regex ".*\.gz$" -delete
 find /var/log -type f -regex ".*\.[0-9]$" -delete
 
 # wipe log files
+echo "Wiping all log files"
 find /var/log/ -type f -exec cp /dev/null {} \;
 
 # delete symlink for tests running
+echo "Removing symlink for tests running"
 rm -f /usr/local/bin/invoke_tests
 
 # remove apt mock
+echo "Removing apt mock binaries"
 prefix=/usr/local/bin
 for tool in apt apt-get apt-key;do
     sudo rm -f $prefix/$tool
