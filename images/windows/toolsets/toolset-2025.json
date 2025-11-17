@@ -216,8 +216,9 @@
         "vsix": [
             "SSIS.MicrosoftDataToolsIntegrationServices",
             "VisualStudioClient.MicrosoftVisualStudio2022InstallerProjects",
-            "WixToolset.WixToolsetVisualStudio2022Extension",
-            "ProBITools.MicrosoftAnalysisServicesModelingProjects2022"
+            "ProBITools.MicrosoftReportProjectsforVisualStudio2022",
+            "ProBITools.MicrosoftAnalysisServicesModelingProjects2022",
+            "WixToolset.WixToolsetVisualStudio2022Extension"
         ]
     },
     "docker": {
