@@ -121,6 +121,15 @@ build {
     valid_exit_codes  = [0, 3010]
   }
 
+  provisioner "powershell" {
+    environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
+    scripts          = [
+      "${path.root}/../scripts/build/Install-Wix.ps1",
+      "${path.root}/../scripts/build/Install-WDK.ps1",
+      "${path.root}/../scripts/build/Install-VSExtensions.ps1"
+    ]
+  }
+
 provisioner "powershell" {
     inline = [" Add-Content -Path C:\\software-report.md -Value 'Software Report - Windows 2025'", "add-content -Path c:\\software-report.json -Value '{\"SoftwareReport\":\"Windows 2025\"}'"]
   }
