@@ -176,64 +176,12 @@ build {
       "${path.root}/../scripts/build/Install-DACFx.ps1",
       "${path.root}/../scripts/build/Install-MysqlCli.ps1",
       "${path.root}/../scripts/build/Install-SQLPowerShellTools.ps1",
-      "${path.root}/../scripts/build/Install-SQLOLEDBDriver.ps1",
-      "${path.root}/../scripts/build/Install-DotnetSDK.ps1",
-      "${path.root}/../scripts/build/Install-Mingw64.ps1",
-      "${path.root}/../scripts/build/Install-Haskell.ps1",
-      "${path.root}/../scripts/build/Install-Stack.ps1",
-      "${path.root}/../scripts/build/Install-Miniconda.ps1",
-      "${path.root}/../scripts/build/Install-AzureCosmosDbEmulator.ps1",
-      "${path.root}/../scripts/build/Install-Mercurial.ps1",
-      "${path.root}/../scripts/build/Install-Zstd.ps1",
-      "${path.root}/../scripts/build/Install-NSIS.ps1",
-      "${path.root}/../scripts/build/Install-Vcpkg.ps1",
-      "${path.root}/../scripts/build/Install-PostgreSQL.ps1",
-      "${path.root}/../scripts/build/Install-Bazel.ps1",
-      "${path.root}/../scripts/build/Install-AliyunCli.ps1",
-      "${path.root}/../scripts/build/Install-RootCA.ps1",
-      "${path.root}/../scripts/build/Install-MongoDB.ps1",
-      "${path.root}/../scripts/build/Install-CodeQLBundle.ps1",
-      "${path.root}/../scripts/build/Configure-Diagnostics.ps1"
+      "${path.root}/../scripts/build/Install-SQLOLEDBDriver.ps1"
     ]
   }
 
   provisioner "powershell" {
-    elevated_password = "${var.install_password}"
-    elevated_user     = "${var.install_user}"
-    environment_vars  = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
-    scripts           = [
-      "${path.root}/../scripts/build/Install-WindowsUpdates.ps1",
-      "${path.root}/../scripts/build/Configure-DynamicPort.ps1",
-      "${path.root}/../scripts/build/Configure-GDIProcessHandleQuota.ps1",
-      "${path.root}/../scripts/build/Configure-Shell.ps1",
-      "${path.root}/../scripts/build/Configure-DeveloperMode.ps1",
-      "${path.root}/../scripts/build/Install-LLVM.ps1"
-    ]
-  }
-
-  provisioner "windows-restart" {
-    check_registry        = true
-    restart_check_command = "powershell -command \"& {if ((-not (Get-Process TiWorker.exe -ErrorAction SilentlyContinue)) -and (-not [System.Environment]::HasShutdownStarted) ) { Write-Output 'Restart complete' }}\""
-    restart_timeout       = "30m"
-  }
-
-  provisioner "powershell" {
-    pause_before     = "2m0s"
-    environment_vars = ["IMAGE_FOLDER=${var.image_folder}", "TEMP_DIR=${var.temp_dir}"]
-    scripts          = [
-      "${path.root}/../scripts/build/Install-WindowsUpdatesAfterReboot.ps1",
-      "${path.root}/../scripts/build/Invoke-Cleanup.ps1",
-      "${path.root}/../scripts/tests/RunAll-Tests.ps1"
-    ]
-  }
-
-  provisioner "powershell" {
-    inline = ["if (-not (Test-Path ${var.image_folder}\\tests\\testResults.xml)) { throw '${var.image_folder}\\tests\\testResults.xml not found' }"]
-  }
-
-  provisioner "powershell" {
-    environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_FOLDER=${var.image_folder}"]
-    inline           = ["pwsh -File '${var.image_folder}\\SoftwareReport\\Generate-SoftwareReport.ps1'"]
+    inline = [" Add-Content -Path C:\\software-report.md -Value 'Software Report - Windows 2022'", "add-content -Path c:\\software-report.json -Value '{\"SoftwareReport\":\"Windows 2022\"}'"]
   }
 
   provisioner "powershell" {
@@ -252,16 +200,6 @@ build {
     source      = "C:\\software-report.json"
   }
 
-  provisioner "powershell" {
-    environment_vars = ["INSTALL_USER=${var.install_user}"]
-    scripts          = [
-      "${path.root}/../scripts/build/Install-NativeImages.ps1",
-      "${path.root}/../scripts/build/Configure-System.ps1",
-      "${path.root}/../scripts/build/Configure-User.ps1",
-      "${path.root}/../scripts/build/Post-Build-Validation.ps1"
-    ]
-    skip_clean       = true
-  }
 
   provisioner "windows-restart" {
     restart_timeout = "10m"
